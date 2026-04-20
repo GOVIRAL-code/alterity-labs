@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alterity Labs — Video Experts for Brands That Want to Stand Out</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ═══════════════════ CURSOR ═══════════════════ -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- ═══════════════════ LOADER ═══════════════════ -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <div class="loader-bar"></div>
+      <div class="loader-text">
+        <span class="loader-num" id="loaderNum">0</span>
+        <span class="loader-percent">%</span>
+      </div>
+      <p class="loader-tagline">LOADING EXPERIENCE</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════ NAV ═══════════════════ -->
+  <nav class="nav" id="nav">
+    <div class="nav-logo">
+      <span class="nav-logo-text">ALTERITY LABS</span>
+      <span class="nav-logo-dot"></span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#work" class="nav-link" data-text="Work">Work</a></li>
+      <li><a href="#services" class="nav-link" data-text="Services">Services</a></li>
+      <li><a href="#why" class="nav-link" data-text="Why Us">Why Us</a></li>
+      <li><a href="#about" class="nav-link" data-text="About">About</a></li>
+      <li><a href="#contact" class="nav-link" data-text="Contact">Contact</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a href="#contact" class="btn-outline">Start a Project</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Toggle Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <ul>
+      <li><a href="#work" class="mobile-link">Work</a></li>
+      <li><a href="#services" class="mobile-link">Services</a></li>
+      <li><a href="#why" class="mobile-link">Why Us</a></li>
+      <li><a href="#about" class="mobile-link">About</a></li>
+      <li><a href="#contact" class="mobile-link">Contact</a></li>
+    </ul>
+  </div>
+
+  <!-- ═══════════════════ HERO ═══════════════════ -->
+  <section class="hero" id="hero">
+    <!-- Cinematic grain overlay -->
+    <div class="grain"></div>
+
+    <!-- Floating particles -->
+    <canvas class="particles-canvas" id="particlesCanvas"></canvas>
+
+    <!-- Glowing orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Film strips decoration -->
+    <div class="filmstrip filmstrip-left">
+      <div class="filmstrip-holes">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="filmstrip-frames">
+        <div class="fs-frame fs-f1"></div>
+        <div class="fs-frame fs-f2"></div>
+        <div class="fs-frame fs-f3"></div>
+      </div>
+      <div class="filmstrip-holes">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="filmstrip filmstrip-right">
+      <div class="filmstrip-holes">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <div class="filmstrip-frames">
+        <div class="fs-frame fs-f4"></div>
+        <div class="fs-frame fs-f5"></div>
+        <div class="fs-frame fs-f6"></div>
+      </div>
+      <div class="filmstrip-holes">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <!-- Eyebrow -->
+      <div class="hero-eyebrow" data-animate="fade-up">
+        <span class="eyebrow-line"></span>
+        <span class="eyebrow-text">Video-First Creative Agency</span>
+        <span class="eyebrow-line"></span>
+      </div>
+
+      <!-- Main headline — character split animation -->
+      <h1 class="hero-title">
+        <div class="title-line">
+          <span class="word-mask"><span class="word-inner" data-word="VIDEO">VIDEO</span></span>
+        </div>
+        <div class="title-line">
+          <span class="word-mask"><span class="word-inner accent-word" data-word="EXPERTS">EXPERTS</span></span>
+        </div>
+        <div class="title-line">
+          <span class="word-mask"><span class="word-inner" data-word="FOR BRANDS">FOR BRANDS</span></span>
+        </div>
+      </h1>
+
+      <!-- Subtitle with typewriter -->
+      <p class="hero-subtitle" data-animate="fade-up">
+        We create high-impact video content & full digital support —<br />
+        <span class="typewriter" id="typewriter"></span>
+      </p>
+
+      <!-- CTAs -->
+      <div class="hero-ctas" data-animate="fade-up">
+        <a href="#work" class="btn-primary">
+          <span class="btn-text">View Our Work</span>
+          <span class="btn-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </span>
+          <div class="btn-bg"></div>
+        </a>
+        <a href="#contact" class="btn-showreel">
+          <div class="play-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.6A2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.16a16 16 0 006.93 6.93l1.52-1.52a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </div>
+          <span>Start a Project</span>
+        </a>
+      </div>
+
+      <!-- Stats -->
+      <div class="hero-stats" data-animate="fade-up">
+        <div class="stat">
+          <span class="stat-num" data-count="200">0</span>
+          <span class="stat-plus">+</span>
+          <p class="stat-label">Videos Delivered</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-count="4">0</span>
+          <p class="stat-label">Service Verticals</p>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num" data-count="50">0</span>
+          <span class="stat-plus">+</span>
+          <p class="stat-label">Happy Clients</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      <span class="scroll-text">SCROLL</span>
+    </div>
+
+    <!-- Marquee stripe -->
+    <div class="hero-marquee">
+      <div class="marquee-track">
+        <span>VIDEO EDITING</span><span class="marquee-dot">&#9679;</span>
+        <span>REELS & SHORTS</span><span class="marquee-dot">&#9679;</span>
+        <span>GRAPHIC DESIGN</span><span class="marquee-dot">&#9679;</span>
+        <span>WEB DEVELOPMENT</span><span class="marquee-dot">&#9679;</span>
+        <span>MOBILE APPS</span><span class="marquee-dot">&#9679;</span>
+        <span>CONTENT CREATION</span><span class="marquee-dot">&#9679;</span>
+        <span>VIDEO EDITING</span><span class="marquee-dot">&#9679;</span>
+        <span>REELS & SHORTS</span><span class="marquee-dot">&#9679;</span>
+        <span>GRAPHIC DESIGN</span><span class="marquee-dot">&#9679;</span>
+        <span>WEB DEVELOPMENT</span><span class="marquee-dot">&#9679;</span>
+        <span>MOBILE APPS</span><span class="marquee-dot">&#9679;</span>
+        <span>CONTENT CREATION</span><span class="marquee-dot">&#9679;</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SHOWREEL ═══════════════════ -->
+  <section class="showreel" id="showreel">
+    <div class="grain"></div>
+    <div class="showreel-container">
+      <div class="showreel-badge" data-animate="zoom-in">2025 SHOWREEL</div>
+      <h2 class="showreel-title" data-animate="fade-up">
+        <span>Every</span> <span class="highlight">Frame</span> <span>Tells</span> <span>a</span> <span>Story</span>
+      </h2>
+
+      <div class="showreel-layout" id="showreelWrapper">
+
+        <!-- ── MAIN PLAYER ─────────────────────────── -->
+        <div class="sr-player-col">
+          <div class="sr-player-frame" id="srPlayerFrame">
+
+            <!-- Instagram iframe embed — src injected by JS -->
+            <iframe
+              id="srIframe"
+              class="sr-iframe"
+              src=""
+              frameborder="0"
+              scrolling="no"
+              allowtransparency="true"
+              allowfullscreen="true"
+              title="Instagram Reel Player">
+            </iframe>
+
+            <!-- Shown before any URL is configured -->
+            <div class="sr-placeholder" id="srPlaceholder">
+              <div class="vp-grid">
+                <div class="vp-cell c1"></div>
+                <div class="vp-cell c2"></div>
+                <div class="vp-cell c3"></div>
+                <div class="vp-cell c4"></div>
+                <div class="vp-cell c5"></div>
+                <div class="vp-cell c6"></div>
+              </div>
+              <div class="vp-overlay">
+                <div class="sr-placeholder-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                </div>
+                <p class="sr-placeholder-title">Add Your Instagram Links</p>
+                <p class="sr-placeholder-sub">Open <code>js/instagram-config.js</code> and paste your reel URLs into <code>showreelPosts</code></p>
+                <a href="https://www.instagram.com/portfolio.showcase/" target="_blank" rel="noopener" class="vp-ig-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                  View Portfolio on Instagram
+                </a>
+              </div>
+              <div class="scan-line"></div>
+            </div>
+
+            <!-- Loading spinner shown while iframe loads -->
+            <div class="sr-loader" id="srLoader">
+              <div class="sr-spinner"></div>
+            </div>
+
+          </div>
+
+          <!-- Currently playing label -->
+          <div class="sr-now-playing" id="srNowPlaying">
+            <span class="sr-np-dot"></span>
+            <span class="sr-np-label" id="srNpLabel">Select a reel below</span>
+          </div>
+        </div>
+
+        <!-- ── SIDE PLAYLIST ──────────────────────── -->
+        <div class="sr-playlist" id="srPlaylist">
+          <!-- Items injected by JS from INSTAGRAM_CONFIG -->
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ WORK ═══════════════════ -->
+  <section class="work" id="work">
+    <div class="grain"></div>
+    <div class="section-header" data-animate="fade-up">
+      <span class="section-label">Selected Work</span>
+      <h2 class="section-title">
+        <span class="line-reveal">Projects That</span>
+        <span class="line-reveal accent-text">Define Excellence</span>
+      </h2>
+      <p class="section-desc">A curated collection of work spanning graphic design, video editing, content creation, and visual branding.</p>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="work-filters" data-animate="fade-up">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="design">Graphic Design</button>
+      <button class="filter-btn" data-filter="video">Video Editing</button>
+      <button class="filter-btn" data-filter="content">Content</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+    </div>
+
+    <!-- Work grid -->
+    <div class="work-grid" id="workGrid">
+
+      <!-- Project Card 1 — FEATURED -->
+      <article class="work-card featured" data-category="video" data-animate="card-reveal" data-ig-id="card-1">
+        <div class="card-media">
+          <div class="card-video-bg bg-1"></div>
+          <div class="card-overlay"></div>
+          <div class="card-hover-effect"></div>
+          <span class="card-play-btn">
+            <svg viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+          <div class="card-badge">FEATURED</div>
+        </div>
+        <div class="card-info">
+          <div class="card-meta">
+            <span class="card-category">Video Editing</span>
+            <span class="card-year">2025</span>
+          </div>
+          <h3 class="card-title">Brand Promo Reel — Full Production Edit</h3>
+          <p class="card-desc">A high-energy promotional video combining dynamic cuts, colour-graded visuals, and synced sound design to elevate a brand's online presence.</p>
+          <div class="card-tags">
+            <span>Promo Video</span><span>Color Grade</span><span>Sound Design</span>
+          </div>
+          <a href="#" class="card-link">
+            View Project
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M7 17L17 7M17 7H7M17 7v10"/>
+            </svg>
+          </a>
+        </div>
+      </article>
+
+      <!-- Project Card 2 -->
+      <article class="work-card" data-category="video" data-animate="card-reveal" data-ig-id="card-2">
+        <div class="card-media">
+          <div class="card-video-bg bg-2"></div>
+          <div class="card-overlay"></div>
+          <div class="card-hover-effect"></div>
+          <span class="card-play-btn">
+            <svg viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+        </div>
+        <div class="card-info">
+          <div class="card-meta">
+            <span class="card-category">Video Editing</span>
+            <span class="card-year">2025</span>
+          </div>
+          <h3 class="card-title">Viral Reels & Shorts Package</h3>
+          <p class="card-desc">Fast-paced, attention-grabbing short-form content optimised for Instagram Reels, TikTok, and YouTube Shorts.</p>
+          <div class="card-tags">
+            <span>Reels</span><span>Shorts</span>
+          </div>
+          <a href="#" class="card-link">View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </article>
+
+      <!-- Project Card 3 -->
+      <article class="work-card" data-category="design" data-animate="card-reveal" data-ig-id="card-3">
+        <div class="card-media">
+          <div class="card-video-bg bg-3"></div>
+          <div class="card-overlay"></div>
+          <div class="card-hover-effect"></div>
+          <span class="card-play-btn">
+            <svg viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+        </div>
+        <div class="card-info">
+          <div class="card-meta">
+            <span class="card-category">Graphic Design</span>
+            <span class="card-year">2025</span>
+          </div>
+          <h3 class="card-title">Social Media Post Series</h3>
+          <p class="card-desc">A complete set of scroll-stopping social media graphics — consistent branding, modern layouts, and compelling visuals.</p>
+          <div class="card-tags">
+            <span>Social Media</span><span>Branding</span>
+          </div>
+          <a href="#" class="card-link">View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </article>
+
+      <!-- Project Card 4 -->
+      <article class="work-card" data-category="branding" data-animate="card-reveal" data-ig-id="card-4">
+        <div class="card-media">
+          <div class="card-video-bg bg-4"></div>
+          <div class="card-overlay"></div>
+          <div class="card-hover-effect"></div>
+          <span class="card-play-btn">
+            <svg viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+          <div class="card-badge new-badge">NEW</div>
+        </div>
+        <div class="card-info">
+          <div class="card-meta">
+            <span class="card-category">Visual Branding</span>
+            <span class="card-year">2025</span>
+          </div>
+          <h3 class="card-title">Full Brand Identity Package</h3>
+          <p class="card-desc">End-to-end visual identity — logo, colour palette, typography, and brand guidelines that communicate clearly and memorably.</p>
+          <div class="card-tags">
+            <span>Brand Identity</span><span>Creative Direction</span>
+          </div>
+          <a href="#" class="card-link">View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </article>
+
+      <!-- Project Card 5 -->
+      <article class="work-card" data-category="content" data-animate="card-reveal" data-ig-id="card-5">
+        <div class="card-media">
+          <div class="card-video-bg bg-5"></div>
+          <div class="card-overlay"></div>
+          <div class="card-hover-effect"></div>
+          <span class="card-play-btn">
+            <svg viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+        </div>
+        <div class="card-info">
+          <div class="card-meta">
+            <span class="card-category">Content Creation</span>
+            <span class="card-year">2024</span>
+          </div>
+          <h3 class="card-title">Monthly Social Content Strategy</h3>
+          <p class="card-desc">A full month of cohesive, on-brand social content — mix of graphics, video snippets, and stories crafted to grow engagement.</p>
+          <div class="card-tags">
+            <span>Instagram</span><span>Content Plan</span>
+          </div>
+          <a href="#" class="card-link">View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </article>
+
+      <!-- Project Card 6 -->
+      <article class="work-card" data-category="design" data-animate="card-reveal" data-ig-id="card-6">
+        <div class="card-media">
+          <div class="card-video-bg bg-6"></div>
+          <div class="card-overlay"></div>
+          <div class="card-hover-effect"></div>
+          <span class="card-play-btn">
+            <svg viewBox="0 0 24 24" fill="white">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </span>
+        </div>
+        <div class="card-info">
+          <div class="card-meta">
+            <span class="card-category">Graphic Design</span>
+            <span class="card-year">2024</span>
+          </div>
+          <h3 class="card-title">YouTube Thumbnail Collection</h3>
+          <p class="card-desc">High-CTR thumbnail designs crafted for YouTube channels — bold, clear, and impossible to scroll past.</p>
+          <div class="card-tags">
+            <span>Thumbnails</span><span>YouTube</span>
+          </div>
+          <a href="#" class="card-link">View Project <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════ WHY CHOOSE US ═══════════════════ -->
+  <section class="process" id="why">
+    <div class="grain"></div>
+    <div class="process-container">
+      <div class="section-header" data-animate="fade-up">
+        <span class="section-label">Why Choose Us</span>
+        <h2 class="section-title">
+          <span class="line-reveal">What Sets</span>
+          <span class="line-reveal accent-text">Us Apart</span>
+        </h2>
+        <p class="section-desc">We're not a generic agency. Here's why brands choose us to grow their digital presence.</p>
+      </div>
+
+      <div class="process-timeline">
+        <div class="timeline-track"></div>
+
+        <div class="process-step" data-animate="step-reveal">
+          <div class="step-number">01</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>Video-First Expertise</h3>
+            <p>Video is not just one of our services — it's our core. We understand pacing, storytelling, and platform algorithms in ways generic agencies simply don't.</p>
+          </div>
+        </div>
+
+        <div class="process-step" data-animate="step-reveal">
+          <div class="step-number">02</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>Built for Engagement & Growth</h3>
+            <p>Every piece of content we produce is designed with one goal: to capture attention and grow your audience. We think about hooks, retention, and conversion from the first frame.</p>
+          </div>
+        </div>
+
+        <div class="process-step" data-animate="step-reveal">
+          <div class="step-number">03</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>Clean, Modern & Professional Quality</h3>
+            <p>Our output is always polished, modern, and on-brand. We don't do mediocre — every frame, every pixel, every line of code meets a high standard of quality.</p>
+          </div>
+        </div>
+
+        <div class="process-step" data-animate="step-reveal">
+          <div class="step-number">04</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>All-in-One Digital Support</h3>
+            <p>Video, design, content writing, websites, mobile apps — we handle it all. No need to juggle multiple freelancers or agencies. One team, complete digital support.</p>
+          </div>
+        </div>
+
+        <div class="process-step" data-animate="step-reveal">
+          <div class="step-number">05</div>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+            </svg>
+          </div>
+          <div class="step-content">
+            <h3>Reliable & Client-Focused Workflow</h3>
+            <p>We communicate clearly, hit our deadlines, and stay in your corner until you're completely happy with the result. Your success is directly tied to ours.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ SERVICES ═══════════════════ -->
+  <section class="skills" id="services">
+    <div class="grain"></div>
+    <div class="skills-container">
+      <div class="section-header centered" data-animate="fade-up">
+        <span class="section-label">Our Services</span>
+        <h2 class="section-title">
+          <span class="line-reveal">Everything Your</span>
+          <span class="line-reveal accent-text">Brand Needs</span>
+        </h2>
+        <p class="section-desc">From high-impact video content to full digital support — we're your one-stop creative team.</p>
+      </div>
+
+      <div class="services-grid" data-animate="fade-up">
+
+        <!-- VIDEO EDITING — CORE -->
+        <div class="service-card sc-1 sc-core">
+          <div class="sc-core-badge">OUR CORE</div>
+          <div class="sc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+          </div>
+          <h3>Video Editing</h3>
+          <p>Our signature service — high-impact video content built to capture attention, drive engagement, and grow your brand across every platform.</p>
+          <ul class="sc-list">
+            <li>Reels, Shorts & TikTok Content</li>
+            <li>YouTube Video Editing</li>
+            <li>Ads & Promotional Videos</li>
+            <li>Cinematic & Story-Based Edits</li>
+          </ul>
+          <a href="https://www.instagram.com/portfolio.showcase/" target="_blank" rel="noopener" class="sc-portfolio-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            View Portfolio
+          </a>
+          <div class="sc-glow"></div>
+        </div>
+
+        <!-- CREATIVE SUPPORT -->
+        <div class="service-card sc-2">
+          <div class="sc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/>
+            </svg>
+          </div>
+          <h3>Creative Support</h3>
+          <p>Design, content writing, and social media assets that complement your video strategy and keep your brand consistent everywhere.</p>
+          <ul class="sc-list">
+            <li>Graphic Design (Posts, Thumbnails, Branding)</li>
+            <li>Social Media Content Creation</li>
+            <li>Content Writing (Captions, Scripts, Blogs)</li>
+          </ul>
+          <div class="sc-glow"></div>
+        </div>
+
+        <!-- DIGITAL DEVELOPMENT -->
+        <div class="service-card sc-3">
+          <div class="sc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+            </svg>
+          </div>
+          <h3>Digital Development</h3>
+          <p>We build fast, modern, and user-friendly digital products — from landing pages to full web applications with clean UI/UX design.</p>
+          <ul class="sc-list">
+            <li>Website Design & Development</li>
+            <li>Web Applications</li>
+            <li>UI/UX Design</li>
+          </ul>
+          <div class="sc-glow"></div>
+        </div>
+
+        <!-- MOBILE SOLUTIONS -->
+        <div class="service-card sc-4">
+          <div class="sc-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+          </div>
+          <h3>Mobile Solutions</h3>
+          <p>Beautifully designed mobile apps that work seamlessly across platforms — purpose-built for the way modern audiences consume content.</p>
+          <ul class="sc-list">
+            <li>Mobile App Design & Development</li>
+            <li>Cross-Platform Apps</li>
+          </ul>
+          <div class="sc-glow"></div>
+        </div>
+
+      </div>
+
+      <!-- Tools marquee -->
+      <div class="tools-marquee">
+        <div class="tools-track">
+          <div class="tool-pill">Premiere Pro</div>
+          <div class="tool-pill">After Effects</div>
+          <div class="tool-pill">DaVinci Resolve</div>
+          <div class="tool-pill">Photoshop</div>
+          <div class="tool-pill">Illustrator</div>
+          <div class="tool-pill">CapCut</div>
+          <div class="tool-pill">React</div>
+          <div class="tool-pill">Figma</div>
+          <div class="tool-pill">Flutter</div>
+          <div class="tool-pill">Canva Pro</div>
+          <div class="tool-pill">Premiere Pro</div>
+          <div class="tool-pill">After Effects</div>
+          <div class="tool-pill">DaVinci Resolve</div>
+          <div class="tool-pill">Photoshop</div>
+          <div class="tool-pill">Illustrator</div>
+          <div class="tool-pill">CapCut</div>
+          <div class="tool-pill">React</div>
+          <div class="tool-pill">Figma</div>
+          <div class="tool-pill">Flutter</div>
+          <div class="tool-pill">Canva Pro</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ ABOUT ═══════════════════ -->
+  <section class="about" id="about">
+    <div class="grain"></div>
+    <div class="about-container">
+      <div class="about-visual" data-animate="fade-right">
+        <div class="about-img-wrapper">
+          <div class="about-img-placeholder">
+            <div class="aip-inner">
+              <div class="aip-circle"></div>
+              <div class="aip-lines">
+                <span></span><span></span><span></span>
+              </div>
+            </div>
+          </div>
+          <div class="about-decoration">
+            <div class="deco-ring ring-1"></div>
+            <div class="deco-ring ring-2"></div>
+          </div>
+          <div class="about-award">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"/>
+            </svg>
+            <span>Video-First Agency</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-content" data-animate="fade-left">
+        <span class="section-label">About Us</span>
+        <h2 class="about-title">
+          <span class="line-reveal">Video-First</span>
+          <span class="line-reveal">Creative</span>
+          <span class="line-reveal accent-text">Agency</span>
+        </h2>
+        <p class="about-text">We are a <em>video-first creative agency</em> focused on helping brands capture attention and grow in the digital space. Our expertise lies in crafting engaging, high-quality video content that connects with modern audiences.</p>
+        <p class="about-text">From short-form content to full-scale edits, we bring ideas to life with precision and creativity. Beyond video, we provide <em>complete digital support</em> — including design, content writing, and development — so our clients have everything they need in one place.</p>
+        <div class="about-highlights">
+          <div class="highlight-item">
+            <span class="hi-icon">&#9654;</span>
+            <span>Video-first approach — not a generic agency</span>
+          </div>
+          <div class="highlight-item">
+            <span class="hi-icon">&#9654;</span>
+            <span>Full digital support: video, design, dev & more</span>
+          </div>
+          <div class="highlight-item">
+            <span class="hi-icon">&#9654;</span>
+            <span>Content built to engage, grow & scale your brand</span>
+          </div>
+        </div>
+        <a href="#contact" class="btn-primary">
+          <span class="btn-text">Start a Project</span>
+          <span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+          <div class="btn-bg"></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ TESTIMONIALS ═══════════════════ -->
+  <section class="testimonials">
+    <div class="grain"></div>
+    <div class="testi-container">
+      <div class="section-header centered" data-animate="fade-up">
+        <span class="section-label">Client Words</span>
+        <h2 class="section-title"><span class="line-reveal">What They</span><span class="line-reveal accent-text">Say</span></h2>
+      </div>
+      <div class="testi-slider" id="testiSlider">
+        <div class="testi-track" id="testiTrack">
+          <div class="testi-card">
+            <div class="testi-quote">"</div>
+            <p class="testi-text">The promo video Alterity Labs made for us generated more leads in 2 weeks than our previous 6-month campaign. Pure visual genius.</p>
+            <div class="testi-author">
+              <div class="author-avatar av1"></div>
+              <div>
+                <strong>Sarah Mitchell</strong>
+                <span>CMO, Apex Automotive</span>
+              </div>
+            </div>
+            <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+
+          <div class="testi-card">
+            <div class="testi-quote">"</div>
+            <p class="testi-text">The team understood the vision immediately. The final edit was beyond what I imagined — exactly the energy and emotion I wanted to communicate.</p>
+            <div class="testi-author">
+              <div class="author-avatar av2"></div>
+              <div>
+                <strong>Damien Torres</strong>
+                <span>Music Artist, Meridian</span>
+              </div>
+            </div>
+            <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+
+          <div class="testi-card">
+            <div class="testi-quote">"</div>
+            <p class="testi-text">Fastest turnaround I've seen without compromising an ounce of quality. Alterity Labs is the team you hire when the stakes are high.</p>
+            <div class="testi-author">
+              <div class="author-avatar av3"></div>
+              <div>
+                <strong>Priya Nair</strong>
+                <span>Director, Luminary Films</span>
+              </div>
+            </div>
+            <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+          </div>
+        </div>
+
+        <div class="testi-controls">
+          <button class="testi-prev" id="testiPrev" aria-label="Previous">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <div class="testi-dots" id="testiDots">
+            <span class="testi-dot active"></span>
+            <span class="testi-dot"></span>
+            <span class="testi-dot"></span>
+          </div>
+          <button class="testi-next" id="testiNext" aria-label="Next">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ CONTACT ═══════════════════ -->
+  <section class="contact" id="contact">
+    <div class="grain"></div>
+    <div class="orb orb-contact-1"></div>
+    <div class="orb orb-contact-2"></div>
+    <div class="contact-container">
+      <div class="contact-left" data-animate="fade-right">
+        <span class="section-label">Get In Touch</span>
+        <h2 class="contact-title">
+          <span class="line-reveal">Start Your</span>
+          <span class="line-reveal">Project</span>
+          <span class="line-reveal accent-text">Today.</span>
+        </h2>
+        <p class="contact-desc">Let's turn your ideas into high-impact content. Work with a team that understands both creativity and growth — and delivers results that matter.</p>
+        <div class="contact-details">
+            <a href="mailto:hello@alteritylabs.com" class="contact-detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>hello@alteritylabs.com</span>
+          </a>
+          <a href="tel:+1234567890" class="contact-detail">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 8.81a19.79 19.79 0 01-3.07-8.6A2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.16a16 16 0 006.93 6.93l1.52-1.52a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            <span>+1 (234) 567-890</span>
+          </a>
+        </div>
+        <div class="social-links">
+          <a href="#" class="social-link" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="Vimeo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 5.5c-.08 2-1.5 4.8-4.2 8.3-2.8 3.7-5.2 5.5-7.1 5.5-1.2 0-2.2-1.1-3-3.3L6.5 10.8C5.9 8.6 5.2 7.5 4.4 7.5c-.2 0-.8.4-1.9 1.1L1 7c1.2-1 2.3-2 3.4-3 1.5-1.3 2.6-2 3.4-2 1.8 0 2.9 1.1 3.3 3.2.5 2.4.8 3.9.9 4.5.5 2.2 1 3.3 1.5 3.3.4 0 1.1-.7 2-2 .9-1.3 1.4-2.3 1.4-2.9 0-1.3-.5-1.9-1.4-1.9-.5 0-1 .1-1.5.4.9-3.1 2.7-4.7 5.4-4.6 2 0 2.9 1.3 2.6 3.9z"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="YouTube">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42C1 8.14 1 11.72 1 11.72s0 3.58.46 5.3a2.78 2.78 0 001.95 1.96C5.12 19.44 12 19.44 12 19.44s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96C23 15.3 23 11.72 23 11.72s0-3.58-.46-5.3z"/><polygon points="9.75 15.02 15.5 11.72 9.75 8.42 9.75 15.02"/></svg>
+          </a>
+          <a href="#" class="social-link" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-right" data-animate="fade-left">
+        <form class="contact-form" id="contactForm">
+          <div class="form-group">
+            <input type="text" id="fname" name="name" class="form-input" placeholder=" " required />
+            <label for="fname" class="form-label">Your Name</label>
+            <div class="form-line"></div>
+          </div>
+          <div class="form-group">
+            <input type="email" id="femail" name="email" class="form-input" placeholder=" " required />
+            <label for="femail" class="form-label">Email Address</label>
+            <div class="form-line"></div>
+          </div>
+          <div class="form-group">
+            <select id="fproject" name="project" class="form-input form-select" required>
+              <option value="" disabled selected></option>
+              <option value="video">Video Editing</option>
+              <option value="creative">Creative Support (Design / Content)</option>
+              <option value="web">Website / Web App</option>
+              <option value="mobile">Mobile App</option>
+              <option value="other">Other</option>
+            </select>
+            <label for="fproject" class="form-label">Project Type</label>
+            <div class="form-line"></div>
+          </div>
+          <div class="form-group">
+            <textarea id="fmsg" name="message" class="form-input form-textarea" placeholder=" " rows="4" required></textarea>
+            <label for="fmsg" class="form-label">Tell Us About Your Project</label>
+            <div class="form-line"></div>
+          </div>
+          <button type="submit" class="btn-primary btn-submit">
+            <span class="btn-text">Send Message</span>
+            <span class="btn-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+            <div class="btn-bg"></div>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════ FOOTER ═══════════════════ -->
+  <footer class="footer">
+    <div class="grain"></div>
+    <div class="footer-content">
+      <div class="footer-top">
+        <div class="footer-logo">
+          <span class="nav-logo-text">ALTERITY LABS</span>
+          <span class="nav-logo-dot"></span>
+        </div>
+        <p class="footer-tagline">Video-first creative agency. Built for brands that want to grow.</p>
+        <div class="footer-cta-text" data-animate="fade-up">
+          <h3 class="footer-big-text">Let's Build<br /><span class="accent-text">Something</span><br />Great.</h3>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Alterity Labs. All rights reserved.</p>
+        <div class="footer-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Imprint</a>
+        </div>
+        <p class="footer-made">Designed & Developed with passion</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ═══════════════════ INSTAGRAM EMBED MODAL ═══════════════════ -->
+  <div class="ig-modal" id="igModal">
+    <div class="ig-modal-backdrop" id="igModalBackdrop"></div>
+    <div class="ig-modal-box">
+      <button class="ig-modal-close" id="igModalClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+      <div class="ig-modal-inner" id="igModalInner">
+        <!-- Instagram embed injected here by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram embed script (loads lazily) -->
+  <script async defer src="//www.instagram.com/embed.js"></script>
+  <script src="js/instagram-config.js"></script>
+  <script src="js/script.js"></script>
+</body>
+</html>
