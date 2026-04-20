@@ -409,11 +409,12 @@ function startPageAnimations() {
     playlist.appendChild(item);
   });
 
-  /* Convert Instagram post URL → embed iframe src */
+  /* Convert Instagram post URL → embed iframe src with autoplay */
   function toEmbedUrl(url) {
     // handles /p/ posts and /reel/ reels
+    // autoplay=1 starts video automatically; cr=1 removes controls on some clients
     const clean = url.trim().replace(/\/$/, '');
-    return clean + '/embed/captioned/';
+    return clean + '/embed/captioned/?autoplay=1&muted=1';
   }
 
   /* Load a post into the iframe */
@@ -690,7 +691,54 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 })();
 
 /* ─────────────────────────────────────────────────────
-   22. BACKGROUND NOISE ANIMATION (subtle flicker)
+   22. FORCE AUTOPLAY — all videos always playing
+───────────────────────────────────────────────────── */
+(function forceAutoplay() {
+  function enforcePlay(video) {
+    video.muted   = true;
+    video.autoplay = true;
+    video.loop    = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('disablePictureInPicture', '');
+    video.setAttribute('controlslist', 'nodownload nofullscreen noremoteplayback');
+    video.removeAttribute('controls');
+
+    const tryPlay = () => {
+      if (video.paused) {
+        video.play().catch(() => {});
+      }
+    };
+
+    video.addEventListener('pause',  tryPlay);
+    video.addEventListener('ended',  tryPlay);
+    video.addEventListener('canplay', tryPlay);
+    tryPlay();
+  }
+
+  // Enforce on all existing videos
+  document.querySelectorAll('video').forEach(enforcePlay);
+
+  // Watch for any videos added dynamically (e.g. inside iframes injected later)
+  const mo = new MutationObserver(mutations => {
+    mutations.forEach(m => {
+      m.addedNodes.forEach(node => {
+        if (node.tagName === 'VIDEO') enforcePlay(node);
+        if (node.querySelectorAll) node.querySelectorAll('video').forEach(enforcePlay);
+      });
+    });
+  });
+  mo.observe(document.body, { childList: true, subtree: true });
+
+  // Poster: user gesture re-triggers play on mobile
+  document.addEventListener('touchstart', () => {
+    document.querySelectorAll('video').forEach(v => {
+      if (v.paused) v.play().catch(() => {});
+    });
+  }, { once: false, passive: true });
+})();
+
+/* ─────────────────────────────────────────────────────
+   22b. BACKGROUND NOISE ANIMATION (subtle flicker)
 ───────────────────────────────────────────────────── */
 (function initGrainAnim() {
   const grains = document.querySelectorAll('.grain');
