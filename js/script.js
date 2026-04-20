@@ -43,19 +43,45 @@
 })();
 
 /* ─────────────────────────────────────────────────────
-   2. CUSTOM CURSOR
+   2. CUSTOM CURSOR  (desktop only — hidden on touch)
 ───────────────────────────────────────────────────── */
 (function initCursor() {
+  // Detect touch device — skip cursor entirely
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
   const cursor   = document.getElementById('cursor');
   const follower = document.getElementById('cursorFollower');
+
+  if (isTouch) {
+    // Immediately hide both elements and restore default cursor
+    if (cursor)   { cursor.style.display   = 'none'; }
+    if (follower) { follower.style.display = 'none'; }
+    document.body.style.cursor = 'auto';
+    return; // do nothing else
+  }
+
   let mouseX = 0, mouseY = 0;
-  let follX = 0, follY = 0;
+  let follX  = 0, follY  = 0;
+  let rafRunning = false;
 
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
     cursor.style.left = mouseX + 'px';
     cursor.style.top  = mouseY + 'px';
+    if (!rafRunning) {
+      rafRunning = true;
+      requestAnimationFrame(animateFollower);
+    }
+  });
+
+  // Hide cursor when mouse leaves the window
+  document.addEventListener('mouseleave', () => {
+    cursor.style.opacity   = '0';
+    follower.style.opacity = '0';
+  });
+  document.addEventListener('mouseenter', () => {
+    cursor.style.opacity   = '1';
+    follower.style.opacity = '1';
   });
 
   function animateFollower() {
@@ -65,7 +91,6 @@
     follower.style.top  = follY + 'px';
     requestAnimationFrame(animateFollower);
   }
-  animateFollower();
 
   // Hover state
   const hoverEls = document.querySelectorAll('a, button, .work-card, .filter-btn, .testi-prev, .testi-next, .vp-play-circle');
@@ -109,11 +134,19 @@
 })();
 
 /* ─────────────────────────────────────────────────────
-   5. PARTICLE CANVAS
+   5. PARTICLE CANVAS (disabled on mobile for performance)
 ───────────────────────────────────────────────────── */
 (function initParticles() {
   const canvas = document.getElementById('particlesCanvas');
   if (!canvas) return;
+
+  // Skip particles entirely on mobile — saves CPU & battery
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (isTouch || window.innerWidth < 768) {
+    canvas.style.display = 'none';
+    return;
+  }
+
   const ctx = canvas.getContext('2d');
   let W, H, particles = [];
 
@@ -150,7 +183,7 @@
 
   function init() {
     resize();
-    particles = Array.from({ length: 120 }, () => new Particle());
+    particles = Array.from({ length: 60 }, () => new Particle()); // reduced from 120
   }
 
   function animate() {
@@ -311,16 +344,18 @@ function startPageAnimations() {
 }
 
 /* ─────────────────────────────────────────────────────
-   10. PARALLAX
+   10. PARALLAX (desktop only — skip on mobile)
 ───────────────────────────────────────────────────── */
 (function initParallax() {
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (isTouch || window.innerWidth < 768) return; // no parallax on mobile
+
   let ticking = false;
 
   function onScroll() {
     if (!ticking) {
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        // Orbs drift with scroll
         document.querySelectorAll('.orb-1, .orb-2').forEach((orb, i) => {
           const speed = i === 0 ? 0.08 : 0.05;
           orb.style.transform = `translateY(${y * speed}px)`;
@@ -738,9 +773,12 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 })();
 
 /* ─────────────────────────────────────────────────────
-   22b. BACKGROUND NOISE ANIMATION (subtle flicker)
+   22b. BACKGROUND NOISE ANIMATION (desktop only)
 ───────────────────────────────────────────────────── */
 (function initGrainAnim() {
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (isTouch) return; // skip on mobile — causes constant repaints
+
   const grains = document.querySelectorAll('.grain');
   let frame = 0;
   function flicker() {

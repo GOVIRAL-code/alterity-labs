@@ -5,18 +5,32 @@
 
 /* ── RESET & BASE ─────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+  overflow-x: hidden;
+  -webkit-tap-highlight-color: transparent; /* remove tap flash on mobile */
+}
 body {
   background: #080808;
   color: #f0ece4;
   font-family: 'Space Grotesk', 'Inter', sans-serif;
   overflow-x: hidden;
   cursor: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 a { text-decoration: none; color: inherit; }
 img, video { max-width: 100%; display: block; }
 button { cursor: none; border: none; background: none; font-family: inherit; }
 ul { list-style: none; }
+
+/* ── TOUCH DEVICES — hide custom cursor, restore default ── */
+@media (hover: none) and (pointer: coarse) {
+  body { cursor: auto; }
+  button { cursor: pointer; }
+  .cursor, .cursor-follower { display: none !important; }
+}
 
 /* ── CSS VARIABLES ────────────────────────────────── */
 :root {
@@ -49,6 +63,7 @@ ul { list-style: none; }
   transform: translate(-50%, -50%);
   transition: transform 0.1s, width 0.3s var(--ease-out), height 0.3s var(--ease-out);
   mix-blend-mode: difference;
+  will-change: transform;
 }
 .cursor-follower {
   position: fixed;
@@ -60,6 +75,7 @@ ul { list-style: none; }
   z-index: 9998;
   transform: translate(-50%, -50%);
   transition: transform 0.12s ease, width 0.4s var(--ease-out), height 0.4s var(--ease-out), opacity 0.3s;
+  will-change: transform;
 }
 body.cursor-hover .cursor { width: 50px; height: 50px; background: transparent; border: 2px solid var(--accent); }
 body.cursor-hover .cursor-follower { opacity: 0; }
@@ -1685,6 +1701,54 @@ video::-webkit-media-controls-panel     { display: none !important; }
   .hero-ctas { flex-direction: column; align-items: flex-start; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }
   .services-grid { grid-template-columns: 1fr; }
+}
+
+/* ══════════════════════════════════════════════════
+   MOBILE PERFORMANCE — touch devices
+══════════════════════════════════════════════════ */
+@media (hover: none) and (pointer: coarse) {
+
+  /* Restore normal cursor everywhere */
+  *, *::before, *::after { cursor: auto !important; }
+  button, a { cursor: pointer !important; }
+
+  /* Kill heavy background orb animations */
+  .orb { animation: none !important; filter: blur(80px); }
+
+  /* Kill film strip scroll animation */
+  .filmstrip { animation: none !important; display: none; }
+
+  /* Disable grain flicker */
+  .grain { transform: none !important; }
+
+  /* Kill marquee on very small screens to prevent repaints */
+  @media (max-width: 400px) {
+    .marquee-track, .tools-track { animation-duration: 40s; }
+  }
+
+  /* Reduce word reveal animation complexity */
+  .word-inner {
+    transition: none;
+    animation-duration: 0.5s !important;
+  }
+
+  /* Smooth native scroll on iOS */
+  html { -webkit-overflow-scrolling: touch; }
+
+  /* Remove hover effects (no hover on touch) */
+  .work-card:hover  { transform: none !important; }
+  .service-card:hover { transform: none !important; }
+  .skill-card:hover { transform: none !important; border-color: var(--mid) !important; }
+
+  /* GPU-accelerate key animated elements */
+  .hero-title, .hero-subtitle, .hero-ctas, .hero-stats,
+  .sr-player-frame, .work-card, .section-title {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Simpler scroll animations on mobile */
+  [data-animate] { transition-duration: 0.5s !important; }
 }
 
 /* ══════════════════════════════════════════════════
