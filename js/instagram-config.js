@@ -14,10 +14,10 @@
 const INSTAGRAM_CONFIG = {
 
   /* ── SHOWREEL PLAYER ─────────────────────────────────
-     The big player at the top.
-     Add up to 5 of your best posts/reels.
+     The big player on the left.
+     Add up to 5 of your best reels.
      The FIRST one loads automatically.
-     Clicking the rows below switches to that video.
+     Clicking each row on the right switches to that reel.
   ─────────────────────────────────────────────────────*/
   showreelPosts: [
     {
@@ -53,16 +53,41 @@ const INSTAGRAM_CONFIG = {
   ],
 
   /* ── WORK CARDS ──────────────────────────────────────
-     Each card's "View Project" button opens this post
-     in a popup modal on the same page.
+     postUrl    → opens in popup modal when "View Project" clicked
+     previewUrl → plays silently as the card background video
+     Tip: use the SAME url for both fields
   ─────────────────────────────────────────────────────*/
   projects: [
-    { id: 'card-1', postUrl: 'https://www.instagram.com/reel/PASTE_CARD_1_URL_HERE/' },
-    { id: 'card-2', postUrl: 'https://www.instagram.com/reel/PASTE_CARD_2_URL_HERE/' },
-    { id: 'card-3', postUrl: 'https://www.instagram.com/p/PASTE_CARD_3_URL_HERE/'   },
-    { id: 'card-4', postUrl: 'https://www.instagram.com/p/PASTE_CARD_4_URL_HERE/'   },
-    { id: 'card-5', postUrl: 'https://www.instagram.com/reel/PASTE_CARD_5_URL_HERE/' },
-    { id: 'card-6', postUrl: 'https://www.instagram.com/p/PASTE_CARD_6_URL_HERE/'   },
+    {
+      id:         'card-1',
+      postUrl:    'https://www.instagram.com/reel/PASTE_CARD_1_URL_HERE/',
+      previewUrl: 'https://www.instagram.com/reel/PASTE_CARD_1_URL_HERE/',
+    },
+    {
+      id:         'card-2',
+      postUrl:    'https://www.instagram.com/reel/PASTE_CARD_2_URL_HERE/',
+      previewUrl: 'https://www.instagram.com/reel/PASTE_CARD_2_URL_HERE/',
+    },
+    {
+      id:         'card-3',
+      postUrl:    'https://www.instagram.com/p/PASTE_CARD_3_URL_HERE/',
+      previewUrl: 'https://www.instagram.com/p/PASTE_CARD_3_URL_HERE/',
+    },
+    {
+      id:         'card-4',
+      postUrl:    'https://www.instagram.com/p/PASTE_CARD_4_URL_HERE/',
+      previewUrl: 'https://www.instagram.com/p/PASTE_CARD_4_URL_HERE/',
+    },
+    {
+      id:         'card-5',
+      postUrl:    'https://www.instagram.com/reel/PASTE_CARD_5_URL_HERE/',
+      previewUrl: 'https://www.instagram.com/reel/PASTE_CARD_5_URL_HERE/',
+    },
+    {
+      id:         'card-6',
+      postUrl:    'https://www.instagram.com/p/PASTE_CARD_6_URL_HERE/',
+      previewUrl: 'https://www.instagram.com/p/PASTE_CARD_6_URL_HERE/',
+    },
   ],
 
   /* ── PROFILE ─────────────────────────────────────────*/

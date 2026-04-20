@@ -760,39 +760,52 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 ───────────────────────────────────────────────────── */
 (function initInstagramConfig() {
   if (typeof INSTAGRAM_CONFIG === 'undefined') return;
-
-  // Wire showreel Instagram button
-  const showreelIgBtn = document.getElementById('showreelIgBtn');
-  const showreelPlayBtn = document.getElementById('showreelPlayBtn');
   const cfg = INSTAGRAM_CONFIG;
 
-  if (showreelIgBtn && cfg.showreel && !cfg.showreel.includes('PASTE_YOUR')) {
-    showreelIgBtn.href = cfg.showreel;
-    if (showreelPlayBtn) {
-      showreelPlayBtn.style.cursor = 'pointer';
-      showreelPlayBtn.addEventListener('click', () => openIgModal(cfg.showreel));
-    }
+  /* Helper: URL → Instagram embed src with autoplay */
+  function toEmbed(url) {
+    return url.trim().replace(/\/$/, '') + '/embed/?autoplay=1&muted=1';
   }
 
-  // Wire work card "View Project" links to open modal
-  if (cfg.projects && cfg.projects.length) {
-    cfg.projects.forEach(proj => {
-      const card = document.querySelector(`[data-ig-id="${proj.id}"]`);
-      if (!card) return;
-      const link = card.querySelector('.card-link');
-      if (!link) return;
+  /* Helper: check if a URL is real (not a placeholder) */
+  function isReal(url) {
+    return url && !url.includes('PASTE_');
+  }
 
-      if (proj.postUrl && !proj.postUrl.includes('PASTE_POST')) {
-        link.href = '#';
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          openIgModal(proj.postUrl);
-        });
-      } else {
-        // Not configured — link to profile
-        link.href = cfg.profileUrl || 'https://www.instagram.com/portfolio.showcase/';
-        link.target = '_blank';
-        link.rel = 'noopener';
+  /* ── Wire card preview iframes + modal links ── */
+  if (cfg.projects && cfg.projects.length) {
+    cfg.projects.forEach((proj, i) => {
+      const card    = document.querySelector(`[data-ig-id="${proj.id}"]`);
+      if (!card) return;
+
+      const link    = card.querySelector('.card-link');
+      const iframe  = document.getElementById(`card-iframe-${i + 1}`);
+
+      /* 1. Inject background preview iframe */
+      if (iframe && isReal(proj.previewUrl)) {
+        iframe.src = toEmbed(proj.previewUrl);
+        iframe.onload = () => iframe.classList.add('loaded');
+        /* Fade in gradient bg out once iframe loaded */
+        iframe.onload = () => {
+          iframe.classList.add('loaded');
+          const bg = card.querySelector('.card-video-bg');
+          if (bg) bg.style.opacity = '0';
+        };
+      }
+
+      /* 2. Wire "View Project" to open modal */
+      if (link) {
+        if (isReal(proj.postUrl)) {
+          link.href = '#';
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            openIgModal(proj.postUrl);
+          });
+        } else {
+          link.href   = cfg.profileUrl || 'https://www.instagram.com/portfolio.showcase/';
+          link.target = '_blank';
+          link.rel    = 'noopener';
+        }
       }
     });
   }

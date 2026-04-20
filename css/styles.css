@@ -971,7 +971,8 @@ video::-webkit-media-controls-panel     { display: none !important; }
   inset: 0;
   background-size: cover;
   background-position: center;
-  transition: transform 0.8s var(--ease-out);
+  transition: transform 0.8s var(--ease-out), opacity 0.8s ease;
+  z-index: 0;
 }
 .work-card:hover .card-video-bg { transform: scale(1.06); }
 
@@ -988,6 +989,24 @@ video::-webkit-media-controls-panel     { display: none !important; }
   background-image: radial-gradient(ellipse at 40% 60%, #ffff0022 0%, transparent 60%), linear-gradient(135deg, #080800, #141400); }
 .bg-6 { background: linear-gradient(135deg, #000d1a, #00152d);
   background-image: radial-gradient(ellipse at 50% 30%, #00bfff22 0%, transparent 60%), linear-gradient(135deg, #000810, #000f20); }
+
+/* ── Card Instagram iframe background player ─────── */
+.card-ig-iframe {
+  position: absolute;
+  /* Centre a portrait reel inside landscape card */
+  top: 50%;
+  left: 50%;
+  width: 180%;        /* oversized so reel fills width */
+  height: 180%;
+  transform: translate(-50%, -50%) scale(1);
+  border: none;
+  pointer-events: none;   /* block pause-on-click */
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  background: transparent;
+}
+.card-ig-iframe.loaded { opacity: 1; }
 
 .card-overlay {
   position: absolute;
