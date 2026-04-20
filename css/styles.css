@@ -1666,11 +1666,215 @@ video::-webkit-media-controls-panel     { display: none !important; }
 [data-animate].visible { opacity: 1; transform: none; }
 
 /* Staggered card delays */
-.work-card:nth-child(2) { transition-delay: 0.1s; }
-.work-card:nth-child(3) { transition-delay: 0.2s; }
-.work-card:nth-child(4) { transition-delay: 0.1s; }
-.work-card:nth-child(5) { transition-delay: 0.2s; }
-.work-card:nth-child(6) { transition-delay: 0.3s; }
+.work-card:nth-child(1) { transition-delay: 0s;    }
+.work-card:nth-child(2) { transition-delay: 0.08s; }
+.work-card:nth-child(3) { transition-delay: 0.16s; }
+.work-card:nth-child(4) { transition-delay: 0.08s; }
+.work-card:nth-child(5) { transition-delay: 0.16s; }
+.work-card:nth-child(6) { transition-delay: 0.24s; }
+
+/* Why-choose steps: stagger */
+.process-step:nth-child(1) { transition-delay: 0s;    }
+.process-step:nth-child(2) { transition-delay: 0.1s;  }
+.process-step:nth-child(3) { transition-delay: 0.2s;  }
+.process-step:nth-child(4) { transition-delay: 0.3s;  }
+.process-step:nth-child(5) { transition-delay: 0.4s;  }
+
+/* ══════════════════════════════════════════════════
+   BEAUTIFUL ANIMATIONS — GPU-safe (transform+opacity only)
+══════════════════════════════════════════════════ */
+
+/* ── Hero accent word: continuous glow pulse ────── */
+@keyframes accent-glow {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(232,196,106,0.25),
+                 0 0 60px rgba(232,196,106,0.0);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(232,196,106,0.55),
+                 0 0 80px rgba(232,196,106,0.2),
+                 0 0 140px rgba(232,196,106,0.08);
+  }
+}
+.accent-word { animation: accent-glow 3s ease-in-out infinite; }
+
+/* ── Hero eyebrow shimmer ───────────────────────── */
+@keyframes eyebrow-shimmer {
+  0%   { opacity: 0.7; }
+  50%  { opacity: 1;   }
+  100% { opacity: 0.7; }
+}
+.eyebrow-text { animation: eyebrow-shimmer 2.5s ease-in-out infinite; }
+
+/* ── Scroll indicator bounce ────────────────────── */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50%       { transform: translateY(10px) scaleY(0.7); }
+}
+.scroll-line { animation: scroll-bounce 2s ease-in-out infinite !important; }
+
+/* ── CTA primary button pulse ring ─────────────── */
+@keyframes btn-ring {
+  0%   { box-shadow: 0 0 0 0   rgba(232,196,106,0.35); }
+  70%  { box-shadow: 0 0 0 14px rgba(232,196,106,0);   }
+  100% { box-shadow: 0 0 0 0   rgba(232,196,106,0);    }
+}
+.btn-primary { animation: btn-ring 2.8s ease-out infinite; }
+.btn-primary:hover { animation: none; }
+
+/* ── Work cards: smooth lift + accent glow border ─ */
+.work-card {
+  will-change: transform;
+  transition: transform 0.5s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.4s ease,
+              box-shadow 0.5s ease;
+}
+.work-card:hover {
+  border-color: rgba(232,196,106,0.45);
+  box-shadow: 0 28px 70px rgba(0,0,0,0.55),
+              0 0 0 1px rgba(232,196,106,0.15),
+              0 0 40px rgba(232,196,106,0.06);
+}
+
+/* ── Service cards: border glow + slide-up ──────── */
+.service-card {
+  will-change: transform, opacity;
+  transition: transform 0.45s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.4s ease,
+              box-shadow 0.45s ease;
+}
+.service-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(232,196,106,0.3);
+  box-shadow: 0 24px 60px rgba(0,0,0,0.45),
+              0 0 40px rgba(232,196,106,0.07);
+}
+.service-card:nth-child(1) { transition-delay: 0s;    }
+.service-card:nth-child(2) { transition-delay: 0.06s; }
+.service-card:nth-child(3) { transition-delay: 0.12s; }
+.service-card:nth-child(4) { transition-delay: 0.18s; }
+
+/* ── Service icon spin on hover ─────────────────── */
+.sc-icon {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.3s, background 0.3s;
+}
+.service-card:hover .sc-icon { transform: rotate(8deg) scale(1.1); }
+
+/* ── Process step: icon bounce on hover ─────────── */
+.step-icon {
+  transition: transform 0.4s cubic-bezier(0.16,1,0.3,1),
+              border-color 0.3s, background 0.3s;
+}
+.process-step:hover .step-icon {
+  transform: scale(1.15) rotate(-5deg);
+  border-color: var(--accent);
+  background: rgba(232,196,106,0.1);
+}
+
+/* ── About image: continuous float ──────────────── */
+@keyframes img-float {
+  0%, 100% { transform: translateY(0px);   }
+  50%       { transform: translateY(-14px); }
+}
+.about-img-placeholder {
+  animation: img-float 5s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ── Deco rings: continuous slow spin ───────────── */
+.ring-1 { animation: spin 18s linear infinite; }
+.ring-2 { animation: spin 28s linear infinite reverse; }
+
+/* ── Stat numbers: glow on enter ────────────────── */
+@keyframes stat-pop {
+  0%   { transform: scale(0.8); opacity: 0;   }
+  60%  { transform: scale(1.1); opacity: 1;   }
+  100% { transform: scale(1);   opacity: 1;   }
+}
+.stat-num.animated { animation: stat-pop 0.6s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+/* ── Social links: staggered hover lift ─────────── */
+.social-links .social-link:nth-child(1) { transition-delay: 0s;    }
+.social-links .social-link:nth-child(2) { transition-delay: 0.05s; }
+.social-links .social-link:nth-child(3) { transition-delay: 0.10s; }
+.social-links .social-link:nth-child(4) { transition-delay: 0.15s; }
+
+/* ── Nav logo dot: accent pulse ─────────────────── */
+@keyframes logo-dot-pulse {
+  0%, 100% { transform: scale(1);   opacity: 1;   }
+  50%       { transform: scale(1.8); opacity: 0.4; }
+}
+.nav-logo-dot { animation: logo-dot-pulse 2.2s ease-in-out infinite; }
+
+/* ── Showreel badge: subtle float ───────────────── */
+@keyframes badge-float {
+  0%, 100% { transform: translateY(0);    }
+  50%       { transform: translateY(-4px); }
+}
+.showreel-badge { animation: badge-float 3s ease-in-out infinite; }
+
+/* ── Playlist item: slide-in stagger ────────────── */
+@keyframes sr-item-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0);    }
+}
+.sr-item {
+  opacity: 0;
+  animation: sr-item-in 0.5s var(--ease-out) forwards;
+}
+.sr-item:nth-child(1) { animation-delay: 0.1s; }
+.sr-item:nth-child(2) { animation-delay: 0.2s; }
+.sr-item:nth-child(3) { animation-delay: 0.3s; }
+.sr-item:nth-child(4) { animation-delay: 0.4s; }
+.sr-item:nth-child(5) { animation-delay: 0.5s; }
+
+/* ── Testimonial card: subtle border shimmer ─────── */
+@keyframes testi-border {
+  0%,100% { border-color: var(--mid); }
+  50%      { border-color: rgba(232,196,106,0.2); }
+}
+.testi-card { animation: testi-border 4s ease-in-out infinite; }
+
+/* ── Footer big text: gradient reveal ───────────── */
+@keyframes footer-text-reveal {
+  from { opacity: 0; transform: translateX(-80px); }
+  to   { opacity: 1; transform: translateX(0);     }
+}
+
+/* ── Card play button: scale pulse ──────────────── */
+@keyframes play-btn-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1);    }
+  50%       { transform: translate(-50%, -50%) scale(1.12); }
+}
+.work-card:hover .card-play-btn {
+  animation: play-btn-pulse 1.2s ease-in-out infinite;
+  opacity: 1;
+}
+
+/* ── Scan line on placeholder: smooth ───────────── */
+@keyframes scan-smooth {
+  0%   { top: -3px; opacity: 0;   }
+  10%  {            opacity: 1;   }
+  90%  {            opacity: 1;   }
+  100% { top: 100%; opacity: 0;   }
+}
+.scan-line { animation: scan-smooth 3.5s ease-in-out infinite; }
+
+/* ── VFX play circle pulse ───────────────────────── */
+@keyframes play-circle-pulse {
+  0%   { box-shadow: 0 0 0 0   rgba(232,196,106,0.5); }
+  70%  { box-shadow: 0 0 0 22px rgba(232,196,106,0);  }
+  100% { box-shadow: 0 0 0 0   rgba(232,196,106,0);   }
+}
+.vp-play-circle { animation: play-circle-pulse 2.2s ease-out infinite; }
+
+/* ── Scroll reveal: smoother easing ─────────────── */
+[data-animate="fade-up"]    { transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+[data-animate="fade-right"] { transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+[data-animate="fade-left"]  { transition: opacity 0.75s cubic-bezier(0.16,1,0.3,1), transform 0.75s cubic-bezier(0.16,1,0.3,1); }
+[data-animate="zoom-in"]    { transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1), transform 0.65s cubic-bezier(0.16,1,0.3,1); }
+[data-animate="card-reveal"]{ transition: opacity 0.7s  cubic-bezier(0.16,1,0.3,1), transform 0.7s  cubic-bezier(0.16,1,0.3,1); }
 
 /* ══════════════════════════════════════════════════
    RESPONSIVE
@@ -1704,51 +1908,57 @@ video::-webkit-media-controls-panel     { display: none !important; }
 }
 
 /* ══════════════════════════════════════════════════
-   MOBILE PERFORMANCE — touch devices
+   MOBILE PERFORMANCE — keep beauty, kill CPU hogs
 ══════════════════════════════════════════════════ */
 @media (hover: none) and (pointer: coarse) {
 
-  /* Restore normal cursor everywhere */
+  /* Restore normal cursor */
   *, *::before, *::after { cursor: auto !important; }
   button, a { cursor: pointer !important; }
 
-  /* Kill heavy background orb animations */
-  .orb { animation: none !important; filter: blur(80px); }
+  /* Keep orb glow but stop the floating loop (saves RAF) */
+  .orb-1, .orb-2, .orb-3 { animation: none !important; }
 
-  /* Kill film strip scroll animation */
+  /* Stop film strip scroll */
   .filmstrip { animation: none !important; display: none; }
 
-  /* Disable grain flicker */
+  /* Freeze grain transform (no JS flicker on mobile) */
   .grain { transform: none !important; }
 
-  /* Kill marquee on very small screens to prevent repaints */
-  @media (max-width: 400px) {
-    .marquee-track, .tools-track { animation-duration: 40s; }
-  }
-
-  /* Reduce word reveal animation complexity */
-  .word-inner {
-    transition: none;
-    animation-duration: 0.5s !important;
-  }
-
-  /* Smooth native scroll on iOS */
+  /* Smooth native iOS momentum scroll */
   html { -webkit-overflow-scrolling: touch; }
 
-  /* Remove hover effects (no hover on touch) */
-  .work-card:hover  { transform: none !important; }
-  .service-card:hover { transform: none !important; }
-  .skill-card:hover { transform: none !important; border-color: var(--mid) !important; }
-
-  /* GPU-accelerate key animated elements */
-  .hero-title, .hero-subtitle, .hero-ctas, .hero-stats,
-  .sr-player-frame, .work-card, .section-title {
-    transform: translateZ(0);
+  /* GPU layers on key elements */
+  .hero-title, .hero-content, .sr-player-frame,
+  .work-card, .service-card, .section-title {
+    will-change: transform, opacity;
     backface-visibility: hidden;
   }
 
-  /* Simpler scroll animations on mobile */
-  [data-animate] { transition-duration: 0.5s !important; }
+  /* Keep entrance animations but snappier on mobile */
+  [data-animate] {
+    transition-duration: 0.55s !important;
+    transition-timing-function: cubic-bezier(0.16,1,0.3,1) !important;
+  }
+
+  /* No tilt transform on tap */
+  .work-card:active {
+    transform: scale(0.98) !important;
+    transition: transform 0.15s ease !important;
+  }
+
+  /* About image float — keep it, looks great */
+  .about-img-placeholder { animation-duration: 6s; }
+
+  /* Slow down continuous loops slightly for battery */
+  .marquee-track  { animation-duration: 32s !important; }
+  .tools-track    { animation-duration: 28s !important; }
+  .ring-1         { animation-duration: 25s !important; }
+  .ring-2         { animation-duration: 38s !important; }
+  .accent-word    { animation-duration: 4s  !important; }
+  .btn-primary    { animation: none !important; }        /* skip ring pulse on mobile */
+  .testi-card     { animation: none !important; }
+  .showreel-badge { animation-duration: 4s  !important; }
 }
 
 /* ══════════════════════════════════════════════════

@@ -236,13 +236,16 @@
    7. COUNTER ANIMATION
 ───────────────────────────────────────────────────── */
 function animateCounter(el) {
-  const target = parseInt(el.dataset.count, 10);
-  const duration = 1800;
-  const start = performance.now();
+  const target   = parseInt(el.dataset.count, 10);
+  const duration = 2000;
+  const start    = performance.now();
+
+  el.classList.add('animated');
 
   function update(ts) {
     const progress = Math.min((ts - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
+    // quartic ease-out — fast start, graceful finish
+    const eased = 1 - Math.pow(1 - progress, 4);
     el.textContent = Math.floor(eased * target);
     if (progress < 1) requestAnimationFrame(update);
     else el.textContent = target;
@@ -634,22 +637,43 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 })();
 
 /* ─────────────────────────────────────────────────────
-   18. TILT EFFECT on work cards
+   18. SMOOTH TILT on work cards (desktop only, GPU-safe)
 ───────────────────────────────────────────────────── */
 (function initTilt() {
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (isTouch) return;
+
   document.querySelectorAll('.work-card').forEach(card => {
+    let rafId;
+    let targetX = 0, targetY = 0;
+    let currentX = 0, currentY = 0;
+    let hovering = false;
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width  - 0.5;
-      const y = (e.clientY - rect.top)  / rect.height - 0.5;
-      card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 4}deg) translateY(-4px)`;
+      targetX = ((e.clientX - rect.left) / rect.width  - 0.5) * 7;
+      targetY = ((e.clientY - rect.top)  / rect.height - 0.5) * -5;
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = '';
-      card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-    });
+
     card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform 0.1s linear';
+      hovering = true;
+      card.style.transition = 'border-color 0.4s, box-shadow 0.4s';
+      function loop() {
+        if (!hovering) return;
+        currentX += (targetX - currentX) * 0.1;
+        currentY += (targetY - currentY) * 0.1;
+        card.style.transform = `perspective(900px) rotateY(${currentX}deg) rotateX(${currentY}deg) translateY(-6px)`;
+        rafId = requestAnimationFrame(loop);
+      }
+      loop();
+    });
+
+    card.addEventListener('mouseleave', () => {
+      hovering = false;
+      cancelAnimationFrame(rafId);
+      card.style.transition = 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s, box-shadow 0.4s';
+      card.style.transform = '';
+      targetX = 0; targetY = 0;
     });
   });
 })();
