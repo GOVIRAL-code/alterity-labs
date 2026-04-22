@@ -13,3 +13,6 @@ desktop.ini
 
 # Serve cache
 .cache/
+
+# Kilo AI workspace
+.kilo/
