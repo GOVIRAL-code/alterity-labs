@@ -31,13 +31,53 @@
   const eyeShow     = document.getElementById('dbPwEyeShow');
   const eyeHide     = document.getElementById('dbPwEyeHide');
 
-  /* ── SHA-256 via Web Crypto API ── */
-  async function sha256(str) {
-    const buf    = new TextEncoder().encode(str);
-    const digest = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(digest))
-      .map(b => b.toString(16).padStart(2, '0'))
-      .join('');
+  /* ── SHA-256 — pure JS, works on file://, http:// and https:// ── */
+  function sha256(str) {
+    function rightRotate(v, a) { return (v >>> a) | (v << (32 - a)); }
+    var K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+             0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+             0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+             0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+             0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+             0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+             0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+             0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    var H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    var bytes = [], i, c;
+    for (i = 0; i < str.length; i++) {
+      c = str.charCodeAt(i);
+      if (c < 128) { bytes.push(c); }
+      else if (c < 2048) { bytes.push((c >> 6) | 192, (c & 63) | 128); }
+      else { bytes.push((c >> 12) | 224, ((c >> 6) & 63) | 128, (c & 63) | 128); }
+    }
+    var len = bytes.length;
+    bytes.push(128);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    var bits = len * 8;
+    bytes.push(0,0,0,0,(bits>>>24)&255,(bits>>>16)&255,(bits>>>8)&255,bits&255);
+    for (var chunk = 0; chunk < bytes.length; chunk += 64) {
+      var w = [];
+      for (i = 0; i < 16; i++)
+        w[i] = (bytes[chunk+i*4]<<24)|(bytes[chunk+i*4+1]<<16)|(bytes[chunk+i*4+2]<<8)|bytes[chunk+i*4+3];
+      for (i = 16; i < 64; i++) {
+        var s0 = rightRotate(w[i-15],7)^rightRotate(w[i-15],18)^(w[i-15]>>>3);
+        var s1 = rightRotate(w[i-2],17)^rightRotate(w[i-2],19)^(w[i-2]>>>10);
+        w[i] = (w[i-16]+s0+w[i-7]+s1) >>> 0;
+      }
+      var a=H[0],b=H[1],cc=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+      for (i = 0; i < 64; i++) {
+        var S1 = rightRotate(e,6)^rightRotate(e,11)^rightRotate(e,25);
+        var ch = (e&f)^(~e&g);
+        var temp1 = (h+S1+ch+K[i]+w[i]) >>> 0;
+        var S0 = rightRotate(a,2)^rightRotate(a,13)^rightRotate(a,22);
+        var maj = (a&b)^(a&cc)^(b&cc);
+        var temp2 = (S0+maj) >>> 0;
+        h=g; g=f; f=e; e=(d+temp1)>>>0; d=cc; cc=b; b=a; a=(temp1+temp2)>>>0;
+      }
+      H[0]=(H[0]+a)>>>0; H[1]=(H[1]+b)>>>0; H[2]=(H[2]+cc)>>>0; H[3]=(H[3]+d)>>>0;
+      H[4]=(H[4]+e)>>>0; H[5]=(H[5]+f)>>>0; H[6]=(H[6]+g)>>>0; H[7]=(H[7]+h)>>>0;
+    }
+    return H.map(function(n){ return ('00000000'+n.toString(16)).slice(-8); }).join('');
   }
 
   /* ── Session helpers ── */
@@ -157,10 +197,13 @@ function loadConfig() {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
-      // Merge with defaults to ensure all fields exist
       return mergeWithDefaults(parsed);
     }
   } catch (e) { /* ignore */ }
+  // No localStorage — seed from live instagram-config.js values (what's on GitHub)
+  if (typeof INSTAGRAM_CONFIG !== 'undefined') {
+    return mergeWithDefaults(INSTAGRAM_CONFIG);
+  }
   return JSON.parse(JSON.stringify(DEFAULTS));
 }
 
@@ -850,16 +893,191 @@ function switchTab(tabId) {
 }
 
 /* ─────────────────────────────────────────────────────
-   SAVE BUTTON
+   GITHUB PUSH — writes instagram-config.js via API
 ───────────────────────────────────────────────────── */
-document.getElementById('dbSaveBtn').addEventListener('click', () => {
-  const ok = saveConfig();
-  if (ok) {
-    showToast('Changes saved! Reload the site to see updates.');
-  } else {
-    showToast('Could not save — check browser storage settings', true);
+const GH_REPO    = 'GOVIRAL-code/alterity-labs';
+const GH_FILE    = 'js/instagram-config.js';
+const GH_BRANCH  = 'main';
+const TOKEN_KEY  = 'alterity_gh_token';
+
+function getToken() {
+  return localStorage.getItem(TOKEN_KEY) || '';
+}
+
+function buildConfigFileContent(cfg) {
+  function safeUrl(u) { return (u || '').replace(/'/g, "\\'"); }
+  const posts = cfg.showreelPosts.map((p, i) => `    {
+      url:   '${safeUrl(p.url)}',
+      label: '${(p.label||'').replace(/'/g,"\\'")}',
+      tag:   '${p.tag || String(i+1).padStart(2,'0')}',
+      time:  '${p.time || '00:00'}',
+    }`).join(',\n');
+
+  const projects = cfg.projects.map(p => `    {
+      id:         '${p.id}',
+      postUrl:    '${safeUrl(p.postUrl)}',
+      previewUrl: '${safeUrl(p.previewUrl)}',
+    }`).join(',\n');
+
+  return `/* ══════════════════════════════════════════════════════
+   Alterity Labs — Video Config
+   Auto-generated by the Dashboard. Do not edit manually.
+   Last updated: ${new Date().toISOString()}
+══════════════════════════════════════════════════════ */
+
+const INSTAGRAM_CONFIG = {
+
+  showreelPosts: [
+${posts}
+  ],
+
+  projects: [
+${projects}
+  ],
+
+  profileUrl: '${safeUrl(cfg.profileUrl || 'https://www.instagram.com/portfolio.showcase/')}',
+};
+`;
+}
+
+async function pushToGitHub() {
+  const token = getToken();
+  const pushStatus = document.getElementById('dbPushStatus');
+  const saveBtn    = document.getElementById('dbSaveBtn');
+
+  if (!token) {
+    showToast('No GitHub token — add it in GitHub Settings tab first', true);
+    switchTab('settings');
+    return;
   }
-});
+
+  // Show pushing state
+  saveBtn.disabled = true;
+  pushStatus.textContent = '⟳ Pushing…';
+  pushStatus.className = 'db-push-status visible pushing';
+
+  const headers = {
+    'Authorization': 'token ' + token,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json',
+  };
+  const apiBase = `https://api.github.com/repos/${GH_REPO}/contents/${GH_FILE}`;
+
+  try {
+    // 1. Get current file SHA (needed to update)
+    const getRes = await fetch(`${apiBase}?ref=${GH_BRANCH}`, { headers });
+    let sha = null;
+    if (getRes.ok) {
+      const data = await getRes.json();
+      sha = data.sha;
+    } else if (getRes.status !== 404) {
+      throw new Error('GitHub API error: ' + getRes.status);
+    }
+
+    // 2. Build new file content
+    const newContent = buildConfigFileContent(config);
+    const encoded    = btoa(unescape(encodeURIComponent(newContent)));
+
+    // 3. Push via PUT
+    const body = {
+      message: 'chore: update video config from dashboard',
+      content: encoded,
+      branch:  GH_BRANCH,
+    };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(apiBase, {
+      method:  'PUT',
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    if (!putRes.ok) {
+      const err = await putRes.json().catch(() => ({}));
+      throw new Error(err.message || ('Push failed: ' + putRes.status));
+    }
+
+    // 4. Also save locally
+    saveConfig();
+
+    pushStatus.textContent = '✓ Pushed to GitHub!';
+    pushStatus.className = 'db-push-status visible success';
+    showToast('Pushed to GitHub — site will update in ~30 seconds');
+    setTimeout(() => { pushStatus.className = 'db-push-status'; }, 5000);
+
+  } catch (err) {
+    pushStatus.textContent = '✕ ' + err.message;
+    pushStatus.className = 'db-push-status visible error';
+    showToast(err.message, true);
+    setTimeout(() => { pushStatus.className = 'db-push-status'; }, 6000);
+  } finally {
+    saveBtn.disabled = false;
+  }
+}
+
+document.getElementById('dbSaveBtn').addEventListener('click', pushToGitHub);
+
+/* ─────────────────────────────────────────────────────
+   GITHUB SETTINGS TAB
+───────────────────────────────────────────────────── */
+(function initSettingsTab() {
+  const tokenInput   = document.getElementById('dbGhToken');
+  const tokenSaveBtn = document.getElementById('dbTokenSaveBtn');
+  const tokenClearBtn= document.getElementById('dbTokenClearBtn');
+  const tokenTestBtn = document.getElementById('dbTokenTestBtn');
+  const tokenStatus  = document.getElementById('dbTokenStatus');
+  const tokenToggle  = document.getElementById('dbTokenToggle');
+
+  // Load saved token (masked)
+  const saved = getToken();
+  if (saved) tokenInput.value = saved;
+
+  // Toggle visibility
+  tokenToggle.addEventListener('click', () => {
+    tokenInput.type = tokenInput.type === 'password' ? 'text' : 'password';
+  });
+
+  // Save token
+  tokenSaveBtn.addEventListener('click', () => {
+    const val = tokenInput.value.trim();
+    if (!val) { tokenStatus.textContent = 'Enter a token first.'; tokenStatus.className = 'db-token-status error'; return; }
+    localStorage.setItem(TOKEN_KEY, val);
+    tokenStatus.textContent = '✓ Token saved in this browser.';
+    tokenStatus.className = 'db-token-status ok';
+  });
+
+  // Clear token
+  tokenClearBtn.addEventListener('click', () => {
+    localStorage.removeItem(TOKEN_KEY);
+    tokenInput.value = '';
+    tokenStatus.textContent = 'Token cleared.';
+    tokenStatus.className = 'db-token-status error';
+  });
+
+  // Test connection
+  tokenTestBtn.addEventListener('click', async () => {
+    const val = tokenInput.value.trim() || getToken();
+    if (!val) { tokenStatus.textContent = 'Enter a token first.'; tokenStatus.className = 'db-token-status error'; return; }
+    tokenStatus.textContent = 'Testing…';
+    tokenStatus.className = 'db-token-status loading';
+    try {
+      const res = await fetch(`https://api.github.com/repos/${GH_REPO}`, {
+        headers: { 'Authorization': 'token ' + val, 'Accept': 'application/vnd.github+json' }
+      });
+      if (res.ok) {
+        const d = await res.json();
+        tokenStatus.textContent = `✓ Connected to ${d.full_name}`;
+        tokenStatus.className = 'db-token-status ok';
+      } else {
+        tokenStatus.textContent = '✕ Invalid token or no repo access (status ' + res.status + ')';
+        tokenStatus.className = 'db-token-status error';
+      }
+    } catch (e) {
+      tokenStatus.textContent = '✕ Network error — check your connection';
+      tokenStatus.className = 'db-token-status error';
+    }
+  });
+})();
 
 /* ─────────────────────────────────────────────────────
    RESET BUTTON (confirm dialog)

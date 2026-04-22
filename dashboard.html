@@ -99,6 +99,13 @@
         </svg>
         Preview Player
       </a>
+      <a href="#settings" class="db-nav-link" data-tab="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
+        </svg>
+        GitHub Settings
+      </a>
     </nav>
     <div class="db-sidebar-bottom">
       <a href="index.html" class="db-site-link" target="_blank">
@@ -134,20 +141,20 @@
         <span class="db-topbar-sub">Manage your portfolio videos</span>
       </div>
       <div class="db-topbar-actions">
+        <span class="db-push-status" id="dbPushStatus"></span>
         <button class="db-btn db-btn-secondary" id="dbResetBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/>
             <path d="M3 3v5h5"/>
           </svg>
-          Reset to Defaults
+          Reset
         </button>
         <button class="db-btn db-btn-primary" id="dbSaveBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
-            <polyline points="17 21 17 13 7 13 7 21"/>
-            <polyline points="7 3 7 8 15 8"/>
+            <polyline points="16 3 21 3 21 8"/><line x1="10" y1="14" x2="21" y2="3"/>
+            <path d="M21 16v5a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h5"/>
           </svg>
-          Save Changes
+          Push to GitHub
         </button>
       </div>
     </header>
@@ -299,6 +306,95 @@
             ></iframe>
           </div>
           <div class="db-preview-player-label" id="previewPlayerLabel"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         TAB: GITHUB SETTINGS
+    ══════════════════════════════════ -->
+    <section class="db-tab" id="tab-settings">
+      <div class="db-section-header">
+        <div>
+          <h2>GitHub Settings</h2>
+          <p>Connect to GitHub so <strong>Push to GitHub</strong> updates <code>instagram-config.js</code> live — everyone sees your changes instantly, from any device.</p>
+        </div>
+      </div>
+
+      <div class="db-settings-box">
+
+        <!-- Step guide -->
+        <div class="db-settings-steps">
+          <div class="db-step">
+            <div class="db-step-num">1</div>
+            <div class="db-step-text">
+              Go to <a href="https://github.com/settings/tokens/new" target="_blank" rel="noopener">github.com/settings/tokens/new</a>
+            </div>
+          </div>
+          <div class="db-step">
+            <div class="db-step-num">2</div>
+            <div class="db-step-text">Set <strong>Note</strong> = <code>alterity-dashboard</code>, set expiry, tick <strong>repo</strong> scope</div>
+          </div>
+          <div class="db-step">
+            <div class="db-step-num">3</div>
+            <div class="db-step-text">Click <strong>Generate token</strong>, copy it, paste below</div>
+          </div>
+        </div>
+
+        <div class="db-settings-fields">
+          <div class="db-field-group">
+            <div class="db-field-label-row">
+              <span class="db-label">GitHub Personal Access Token</span>
+              <span class="db-field-hint">Stored in your browser only — never sent anywhere except GitHub API</span>
+            </div>
+            <div class="db-login-pw-wrap">
+              <input
+                type="password"
+                id="dbGhToken"
+                class="db-input"
+                placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                autocomplete="off"
+                spellcheck="false"
+              />
+              <button type="button" class="db-pw-toggle" id="dbTokenToggle" aria-label="Show token">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="db-settings-actions">
+            <button class="db-btn db-btn-secondary" id="dbTokenSaveBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px">
+                <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+              </svg>
+              Save Token
+            </button>
+            <button class="db-btn db-btn-ghost" id="dbTokenClearBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+              </svg>
+              Clear Token
+            </button>
+            <button class="db-btn db-btn-secondary" id="dbTokenTestBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+              Test Connection
+            </button>
+          </div>
+
+          <div class="db-token-status" id="dbTokenStatus"></div>
+        </div>
+
+        <div class="db-settings-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:16px;height:16px;flex-shrink:0;margin-top:2px">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <p>The token is saved in your browser's <code>localStorage</code> only. It is never embedded in any file or pushed to GitHub. You need to enter it once per browser/device.</p>
         </div>
       </div>
     </section>
