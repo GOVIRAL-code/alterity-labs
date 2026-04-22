@@ -414,7 +414,7 @@ function startPageAnimations() {
 })();
 
 /* ─────────────────────────────────────────────────────
-   12. SHOWREEL — Instagram iframe player + playlist
+   12. SHOWREEL PLAYER — YouTube & Instagram supported
 ───────────────────────────────────────────────────── */
 (function initShowreelPlayer() {
   const playlist    = document.getElementById('srPlaylist');
@@ -422,23 +422,85 @@ function startPageAnimations() {
   const loader      = document.getElementById('srLoader');
   const placeholder = document.getElementById('srPlaceholder');
   const npLabel     = document.getElementById('srNpLabel');
+  const playerFrame = document.getElementById('srPlayerFrame');
   if (!playlist || !iframe) return;
 
-  // Wait for config to be available
   if (typeof INSTAGRAM_CONFIG === 'undefined' || !INSTAGRAM_CONFIG.showreelPosts) return;
 
   const posts = INSTAGRAM_CONFIG.showreelPosts;
   let activeIdx = -1;
 
-  /* Build playlist items */
+  /* ── Detect video type ── */
+  function getType(url) {
+    if (!url) return null;
+    if (/youtu\.be\/|youtube\.com/.test(url)) return 'youtube';
+    if (/instagram\.com/.test(url))           return 'instagram';
+    return 'unknown';
+  }
+
+  /* ── Extract YouTube video ID ── */
+  function getYouTubeId(url) {
+    // handles youtu.be/ID, watch?v=ID, shorts/ID, embed/ID
+    const patterns = [
+      /youtu\.be\/([^?&\n]+)/,
+      /youtube\.com\/shorts\/([^?&\n]+)/,
+      /[?&]v=([^?&\n]+)/,
+      /youtube\.com\/embed\/([^?&\n]+)/,
+    ];
+    for (const p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  }
+
+  /* ── Build embed URL for any supported type ── */
+  function toEmbedUrl(url) {
+    const type = getType(url);
+
+    if (type === 'youtube') {
+      const id = getYouTubeId(url);
+      if (!id) return '';
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&rel=0&playlist=${id}&controls=0&modestbranding=1`;
+    }
+
+    if (type === 'instagram') {
+      const clean = url.trim().replace(/\/$/, '');
+      return clean + '/embed/?autoplay=1&muted=1';
+    }
+
+    return url; // fallback — try as-is
+  }
+
+  /* ── Switch player aspect ratio ── */
+  function setAspect(url) {
+    if (!playerFrame) return;
+    const type = getType(url);
+    if (type === 'youtube') {
+      // YouTube: landscape 16:9
+      playerFrame.style.aspectRatio = '16/9';
+      playerFrame.style.maxWidth    = '100%';
+    } else {
+      // Instagram Reels / Posts: portrait 9:16
+      playerFrame.style.aspectRatio = '9/16';
+      playerFrame.style.maxWidth    = '420px';
+    }
+  }
+
+  /* ── Build playlist items ── */
   posts.forEach((post, i) => {
     const item = document.createElement('div');
     item.className = 'sr-item' + (i === 0 ? ' active' : '');
+    const type = getType(post.url);
+    const typeIcon = type === 'youtube'
+      ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:12px;height:12px;opacity:0.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42C1 8.14 1 11.72 1 11.72s0 3.58.46 5.3a2.78 2.78 0 001.95 1.96C5.12 19.44 12 19.44 12 19.44s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96C23 15.3 23 11.72 23 11.72s0-3.58-.46-5.3z"/><polygon points="9.75 15.02 15.5 11.72 9.75 8.42 9.75 15.02"/></svg>`
+      : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:12px;height:12px;opacity:0.5"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/></svg>`;
+
     item.innerHTML = `
       <div class="sr-item-num">${post.tag}</div>
       <div class="sr-item-body">
         <span class="sr-item-text">${post.label}</span>
-        <span class="sr-item-time">${post.time}</span>
+        <span class="sr-item-time">${typeIcon} ${post.time}</span>
       </div>
       <div class="sr-item-play">
         <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
@@ -447,15 +509,7 @@ function startPageAnimations() {
     playlist.appendChild(item);
   });
 
-  /* Convert Instagram post URL → embed iframe src with autoplay */
-  function toEmbedUrl(url) {
-    // handles /p/ posts and /reel/ reels
-    // autoplay=1 starts video automatically; cr=1 removes controls on some clients
-    const clean = url.trim().replace(/\/$/, '');
-    return clean + '/embed/captioned/?autoplay=1&muted=1';
-  }
-
-  /* Load a post into the iframe */
+  /* ── Load a video into the player ── */
   function loadPost(idx) {
     const post = posts[idx];
     if (!post || !post.url || post.url.includes('PASTE_')) {
@@ -463,19 +517,17 @@ function startPageAnimations() {
       return;
     }
 
-    // Mark active playlist item
     playlist.querySelectorAll('.sr-item').forEach((el, i) => {
       el.classList.toggle('active', i === idx);
     });
     activeIdx = idx;
 
-    // Show loader, hide placeholder, set iframe src
+    setAspect(post.url);
     showPlaceholder(false);
     loader.style.display = 'flex';
     iframe.style.opacity = '0';
     iframe.src = toEmbedUrl(post.url);
 
-    // Update now-playing label
     if (npLabel) npLabel.textContent = post.label;
 
     iframe.onload = () => {
@@ -490,15 +542,14 @@ function startPageAnimations() {
     if (show) loader.style.display = 'none';
   }
 
-  /* Check if any URLs are configured */
-  const hasRealUrl = posts.some(p => p.url && !p.url.includes('PASTE_'));
-
-  if (hasRealUrl) {
+  /* ── Auto-load first real URL ── */
+  const firstReal = posts.findIndex(p => p.url && !p.url.includes('PASTE_'));
+  if (firstReal !== -1) {
     showPlaceholder(false);
-    loadPost(0); // auto-load first reel
+    setAspect(posts[firstReal].url);
+    loadPost(firstReal);
   } else {
     showPlaceholder(true);
-    // Still build the playlist so user can see the structure
   }
 })();
 
@@ -824,8 +875,29 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   if (typeof INSTAGRAM_CONFIG === 'undefined') return;
   const cfg = INSTAGRAM_CONFIG;
 
-  /* Helper: URL → Instagram embed src with autoplay */
+  /* Helper: detect type */
+  function urlType(url) {
+    if (!url) return null;
+    if (/youtu\.be\/|youtube\.com/.test(url)) return 'youtube';
+    if (/instagram\.com/.test(url))           return 'instagram';
+    return null;
+  }
+
+  /* Helper: extract YouTube ID */
+  function ytId(url) {
+    const m = url.match(/youtu\.be\/([^?&]+)|shorts\/([^?&]+)|[?&]v=([^?&]+)|embed\/([^?&]+)/);
+    return m ? (m[1] || m[2] || m[3] || m[4]) : null;
+  }
+
+  /* Helper: URL → embed src with autoplay */
   function toEmbed(url) {
+    const t = urlType(url);
+    if (t === 'youtube') {
+      const id = ytId(url);
+      if (!id) return '';
+      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=${id}&modestbranding=1`;
+    }
+    // Instagram
     return url.trim().replace(/\/$/, '') + '/embed/?autoplay=1&muted=1';
   }
 

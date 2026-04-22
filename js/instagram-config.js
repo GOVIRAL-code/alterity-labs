@@ -1,27 +1,28 @@
 /* ══════════════════════════════════════════════════════
-   Alterity Labs — Instagram Config
+   Alterity Labs — Video Config
    ─────────────────────────────────────────────────────
-   HOW TO GET YOUR INSTAGRAM POST/REEL LINK:
-   1. Open Instagram on desktop or mobile
-   2. Open the post or reel you want
-   3. Click the "..." (three dots) menu
-   4. Click "Copy link"  →  it looks like:
-        https://www.instagram.com/p/ABC123xyz/       (post)
-        https://www.instagram.com/reel/ABC123xyz/    (reel)
-   5. Paste it below in the matching slot
+   SUPPORTED URL FORMATS:
+   ✅ YouTube:   https://youtu.be/VIDEO_ID
+                 https://www.youtube.com/watch?v=VIDEO_ID
+                 https://www.youtube.com/shorts/VIDEO_ID
+   ✅ Instagram: https://www.instagram.com/reel/POST_ID/
+                 https://www.instagram.com/p/POST_ID/
+
+   HOW TO GET THE LINK:
+   • YouTube  → Share button → Copy Link
+   • Instagram → "..." menu → Copy Link
 ══════════════════════════════════════════════════════ */
 
 const INSTAGRAM_CONFIG = {
 
   /* ── SHOWREEL PLAYER ─────────────────────────────────
-     The big player on the left.
-     Add up to 5 of your best reels.
-     The FIRST one loads automatically.
-     Clicking each row on the right switches to that reel.
+     Paste YouTube OR Instagram links — both work.
+     The FIRST real URL auto-loads in the player.
+     Clicking each row on the right switches to that video.
   ─────────────────────────────────────────────────────*/
   showreelPosts: [
     {
-      url:   'https://www.instagram.com/reel/PASTE_REEL_1_HERE/',
+      url:   'https://www.instagram.com/p/Cwkc0yTIPjw/',
       label: 'Video Editing — Reels, Shorts, YouTube & Ads',
       tag:   '01',
       time:  '00:00',
@@ -55,7 +56,7 @@ const INSTAGRAM_CONFIG = {
   /* ── WORK CARDS ──────────────────────────────────────
      postUrl    → opens in popup modal when "View Project" clicked
      previewUrl → plays silently as the card background video
-     Tip: use the SAME url for both fields
+     Both YouTube and Instagram URLs supported in both fields.
   ─────────────────────────────────────────────────────*/
   projects: [
     {
