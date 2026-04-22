@@ -316,7 +316,7 @@ body.cursor-hover .cursor-follower { opacity: 0; }
   flex-direction: column;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
   padding: 120px 5vw 0;
   background: var(--dark);
 }
@@ -1744,7 +1744,13 @@ video::-webkit-media-controls-panel     { display: none !important; }
                  0 0 140px rgba(232,196,106,0.08);
   }
 }
-.accent-word { animation: accent-glow 3s ease-in-out infinite; }
+.accent-word {
+  animation: accent-glow 3s ease-in-out infinite;
+  will-change: auto;
+  backface-visibility: visible;
+  transform: none;
+  -webkit-transform: none;
+}
 
 /* ── Hero eyebrow shimmer ───────────────────────── */
 @keyframes eyebrow-shimmer {
@@ -1975,8 +1981,8 @@ video::-webkit-media-controls-panel     { display: none !important; }
   /* Smooth native iOS momentum scroll */
   html { -webkit-overflow-scrolling: touch; }
 
-  /* GPU layers on key elements */
-  .hero-title, .hero-content, .sr-player-frame,
+  /* GPU layers on key elements — hero-title excluded to avoid clipping text-shadow glow */
+  .sr-player-frame,
   .work-card, .service-card, .section-title {
     will-change: transform, opacity;
     backface-visibility: hidden;
