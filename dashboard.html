@@ -12,6 +12,65 @@
 <body>
 
   <!-- ══════════════════════════════════════════
+       LOGIN SCREEN
+  ═══════════════════════════════════════════ -->
+  <div class="db-login-screen" id="dbLoginScreen">
+    <div class="db-login-box">
+      <div class="db-login-logo">
+        <span class="db-logo-text">ALTERITY LABS</span>
+        <span class="db-logo-dot"></span>
+      </div>
+      <h2 class="db-login-title">Dashboard Access</h2>
+      <p class="db-login-sub">Enter your credentials to continue</p>
+
+      <form class="db-login-form" id="dbLoginForm" autocomplete="off">
+        <div class="db-login-field">
+          <label class="db-label">Username</label>
+          <input
+            type="text"
+            id="dbLoginUser"
+            class="db-input"
+            placeholder="Username"
+            autocomplete="new-password"
+            spellcheck="false"
+          />
+        </div>
+        <div class="db-login-field">
+          <label class="db-label">Password</label>
+          <div class="db-login-pw-wrap">
+            <input
+              type="password"
+              id="dbLoginPass"
+              class="db-input"
+              placeholder="Password"
+              autocomplete="new-password"
+            />
+            <button type="button" class="db-pw-toggle" id="dbPwToggle" aria-label="Show password">
+              <svg id="dbPwEyeShow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg id="dbPwEyeHide" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
+                <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <div class="db-login-error" id="dbLoginError"></div>
+        <button type="submit" class="db-btn db-btn-primary db-login-btn" id="dbLoginBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          Sign In
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
        SIDEBAR
   ═══════════════════════════════════════════ -->
   <aside class="db-sidebar" id="dbSidebar">
@@ -41,13 +100,23 @@
         Preview Player
       </a>
     </nav>
-    <a href="index.html" class="db-site-link" target="_blank">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
-        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
-      </svg>
-      View Live Site
-    </a>
+    <div class="db-sidebar-bottom">
+      <a href="index.html" class="db-site-link" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        View Live Site
+      </a>
+      <button class="db-logout-btn" id="dbLogoutBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Log Out
+      </button>
+    </div>
   </aside>
 
   <!-- ══════════════════════════════════════════
@@ -152,7 +221,6 @@
       </div>
 
       <div class="db-preview-layout">
-        <!-- Controls -->
         <div class="db-preview-controls">
           <div class="db-preview-input-row">
             <div class="db-field-wrap">
@@ -205,7 +273,6 @@
           </div>
         </div>
 
-        <!-- Player frame -->
         <div class="db-preview-player-wrap">
           <div class="db-preview-player" id="previewPlayer">
             <div class="db-preview-placeholder" id="previewPlaceholder">
@@ -238,6 +305,8 @@
 
   </main>
 
+  <!-- auth-config.js is gitignored — contains hashes only, never plain credentials -->
+  <script src="js/auth-config.js"></script>
   <script src="js/dashboard.js"></script>
 </body>
 </html>

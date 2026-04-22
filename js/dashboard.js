@@ -8,6 +8,126 @@
 'use strict';
 
 /* ─────────────────────────────────────────────────────
+   AUTH — SHA-256 login gate
+   Credentials are hashed in js/auth-config.js (gitignored).
+   Plain-text credentials are never stored in this file.
+───────────────────────────────────────────────────── */
+(function initAuth() {
+  const SESSION_KEY  = 'alterity_dash_session';
+  const SESSION_MINS = (typeof DASHBOARD_AUTH !== 'undefined' && DASHBOARD_AUTH.sessionMinutes) || 60;
+
+  const loginScreen = document.getElementById('dbLoginScreen');
+  const loginForm   = document.getElementById('dbLoginForm');
+  const loginUser   = document.getElementById('dbLoginUser');
+  const loginPass   = document.getElementById('dbLoginPass');
+  const loginError  = document.getElementById('dbLoginError');
+  const loginBtn    = document.getElementById('dbLoginBtn');
+  const logoutBtn   = document.getElementById('dbLogoutBtn');
+  const pwToggle    = document.getElementById('dbPwToggle');
+  const eyeShow     = document.getElementById('dbPwEyeShow');
+  const eyeHide     = document.getElementById('dbPwEyeHide');
+
+  /* ── SHA-256 via Web Crypto API ── */
+  async function sha256(str) {
+    const buf    = new TextEncoder().encode(str);
+    const digest = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(digest))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('');
+  }
+
+  /* ── Session helpers ── */
+  function isSessionValid() {
+    try {
+      const raw = sessionStorage.getItem(SESSION_KEY);
+      if (!raw) return false;
+      const { expiry } = JSON.parse(raw);
+      return Date.now() < expiry;
+    } catch (e) { return false; }
+  }
+
+  function createSession() {
+    const expiry = Date.now() + SESSION_MINS * 60 * 1000;
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify({ expiry }));
+  }
+
+  function destroySession() {
+    sessionStorage.removeItem(SESSION_KEY);
+  }
+
+  /* ── Show / hide dashboard ── */
+  function showDashboard() {
+    loginScreen.classList.add('hidden');
+  }
+
+  function showLogin(msg) {
+    loginScreen.classList.remove('hidden');
+    loginUser.value = '';
+    loginPass.value = '';
+    if (msg) { loginError.textContent = msg; }
+    setTimeout(() => loginUser.focus(), 100);
+  }
+
+  /* ── Password visibility toggle ── */
+  pwToggle.addEventListener('click', () => {
+    const isHidden = loginPass.type === 'password';
+    loginPass.type  = isHidden ? 'text' : 'password';
+    eyeShow.style.display = isHidden ? 'none'  : '';
+    eyeHide.style.display = isHidden ? ''      : 'none';
+  });
+
+  /* ── Login submit ── */
+  loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginError.textContent = '';
+    loginBtn.disabled = true;
+    loginBtn.querySelector('svg').style.opacity = '0.4';
+
+    /* If auth-config.js failed to load, deny access */
+    if (typeof DASHBOARD_AUTH === 'undefined') {
+      loginError.textContent = 'Auth config missing. Add js/auth-config.js locally.';
+      loginBtn.disabled = false;
+      loginBtn.querySelector('svg').style.opacity = '';
+      return;
+    }
+
+    const [uHash, pHash] = await Promise.all([
+      sha256(loginUser.value.trim()),
+      sha256(loginPass.value),
+    ]);
+
+    const validUser = uHash === DASHBOARD_AUTH.usernameHash;
+    const validPass = pHash === DASHBOARD_AUTH.passwordHash;
+
+    loginBtn.disabled = false;
+    loginBtn.querySelector('svg').style.opacity = '';
+
+    if (validUser && validPass) {
+      createSession();
+      showDashboard();
+    } else {
+      loginError.textContent = 'Incorrect username or password.';
+      loginPass.value = '';
+      loginPass.focus();
+    }
+  });
+
+  /* ── Logout ── */
+  logoutBtn.addEventListener('click', () => {
+    destroySession();
+    showLogin('You have been logged out.');
+  });
+
+  /* ── Check session on load ── */
+  if (isSessionValid()) {
+    showDashboard();
+  } else {
+    /* Keep login screen visible, focus username */
+    setTimeout(() => loginUser.focus(), 200);
+  }
+})();
+
+/* ─────────────────────────────────────────────────────
    DEFAULTS  (mirrors instagram-config.js structure)
 ───────────────────────────────────────────────────── */
 const DEFAULTS = {

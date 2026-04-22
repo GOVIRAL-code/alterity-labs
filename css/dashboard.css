@@ -840,3 +840,133 @@ svg { display: block; flex-shrink: 0; }
   gap: 10px;
   justify-content: center;
 }
+
+/* ── LOGIN SCREEN ────────────────────────────────── */
+.db-login-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--db-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.db-login-screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.db-login-box {
+  width: 100%;
+  max-width: 400px;
+  background: var(--db-surface);
+  border: 1px solid var(--db-border2);
+  border-radius: 16px;
+  padding: 40px 36px;
+  margin: 16px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+
+.db-login-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 28px;
+}
+
+.db-login-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.db-login-sub {
+  font-size: 13px;
+  color: var(--db-muted);
+  margin-bottom: 28px;
+}
+
+.db-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.db-login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.db-login-pw-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.db-login-pw-wrap .db-input {
+  padding-right: 42px;
+}
+
+.db-pw-toggle {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--db-muted);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color var(--db-transition);
+}
+
+.db-pw-toggle:hover { color: var(--db-text); }
+.db-pw-toggle svg { width: 16px; height: 16px; }
+
+.db-login-error {
+  font-size: 12px;
+  color: var(--db-red);
+  min-height: 16px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.db-login-btn {
+  width: 100%;
+  justify-content: center;
+  padding: 12px;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+/* ── SIDEBAR BOTTOM (logout) ─────────────────────── */
+.db-sidebar-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 0 12px 4px;
+}
+
+.db-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--db-radius-sm);
+  border: 1px solid rgba(255,85,85,0.2);
+  background: transparent;
+  color: var(--db-red);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background var(--db-transition), border-color var(--db-transition);
+  width: 100%;
+}
+
+.db-logout-btn svg { width: 15px; height: 15px; }
+.db-logout-btn:hover { background: rgba(255,85,85,0.1); border-color: rgba(255,85,85,0.5); }

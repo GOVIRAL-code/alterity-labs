@@ -16,3 +16,6 @@ desktop.ini
 
 # Kilo AI workspace
 .kilo/
+
+# Dashboard auth credentials (hashed — NEVER commit to GitHub)
+js/auth-config.js
