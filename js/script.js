@@ -512,7 +512,7 @@ function startPageAnimations() {
   /* ── Load a video into the player ── */
   function loadPost(idx) {
     const post = posts[idx];
-    if (!post || !post.url || post.url.includes('PASTE_')) {
+    if (!post || !post.url || post.url.includes('PASTE_') || post.url.trim() === '') {
       showPlaceholder(true);
       return;
     }
@@ -543,7 +543,7 @@ function startPageAnimations() {
   }
 
   /* ── Auto-load first real URL ── */
-  const firstReal = posts.findIndex(p => p.url && !p.url.includes('PASTE_'));
+  const firstReal = posts.findIndex(p => p.url && !p.url.includes('PASTE_') && p.url.trim() !== '');
   if (firstReal !== -1) {
     showPlaceholder(false);
     setAspect(posts[firstReal].url);
@@ -644,23 +644,11 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 });
 
 /* ─────────────────────────────────────────────────────
-   16. HERO TITLE MAGNETIC HOVER
+   16. HERO TITLE MAGNETIC HOVER — disabled (conflicts
+       with word-reveal CSS animation)
 ───────────────────────────────────────────────────── */
-(function initMagnetic() {
-  document.querySelectorAll('.word-inner').forEach(el => {
-    el.addEventListener('mousemove', (e) => {
-      const rect = el.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top  + rect.height / 2;
-      const dx = (e.clientX - cx) * 0.08;
-      const dy = (e.clientY - cy) * 0.08;
-      el.style.transform = `translate(${dx}px, ${dy}px)`;
-    });
-    el.addEventListener('mouseleave', () => {
-      el.style.transform = '';
-    });
-  });
-})();
+// Magnetic hover removed — it was overriding the CSS
+// word-reveal transform and causing the glitch effect.
 
 /* ─────────────────────────────────────────────────────
    17. GLITCH TEXT EFFECT on hover for nav-logo
@@ -901,9 +889,9 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     return url.trim().replace(/\/$/, '') + '/embed/?autoplay=1&muted=1';
   }
 
-  /* Helper: check if a URL is real (not a placeholder) */
+  /* Helper: check if a URL is real (not a placeholder and not empty) */
   function isReal(url) {
-    return url && !url.includes('PASTE_');
+    return url && !url.includes('PASTE_') && url.trim() !== '';
   }
 
   /* ── Wire card preview iframes + modal links ── */

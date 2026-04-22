@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Dashboard — Alterity Labs</title>
+  <link rel="stylesheet" href="css/dashboard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ══════════════════════════════════════════
+       SIDEBAR
+  ═══════════════════════════════════════════ -->
+  <aside class="db-sidebar" id="dbSidebar">
+    <div class="db-logo">
+      <span class="db-logo-text">ALTERITY LABS</span>
+      <span class="db-logo-dot"></span>
+    </div>
+    <nav class="db-nav">
+      <a href="#showreel" class="db-nav-link active" data-tab="showreel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        Showreel Videos
+      </a>
+      <a href="#projects" class="db-nav-link" data-tab="projects">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+        </svg>
+        Work Cards
+      </a>
+      <a href="#preview" class="db-nav-link" data-tab="preview">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="12" cy="12" r="10"/>
+          <polygon points="10 8 16 12 10 16 10 8"/>
+        </svg>
+        Preview Player
+      </a>
+    </nav>
+    <a href="index.html" class="db-site-link" target="_blank">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+        <polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+      View Live Site
+    </a>
+  </aside>
+
+  <!-- ══════════════════════════════════════════
+       MAIN CONTENT
+  ═══════════════════════════════════════════ -->
+  <main class="db-main">
+
+    <!-- ── TOPBAR ── -->
+    <header class="db-topbar">
+      <button class="db-burger" id="dbBurger" aria-label="Toggle Sidebar">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="db-topbar-title">
+        <h1>Video Dashboard</h1>
+        <span class="db-topbar-sub">Manage your portfolio videos</span>
+      </div>
+      <div class="db-topbar-actions">
+        <button class="db-btn db-btn-secondary" id="dbResetBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/>
+            <path d="M3 3v5h5"/>
+          </svg>
+          Reset to Defaults
+        </button>
+        <button class="db-btn db-btn-primary" id="dbSaveBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/>
+            <polyline points="17 21 17 13 7 13 7 21"/>
+            <polyline points="7 3 7 8 15 8"/>
+          </svg>
+          Save Changes
+        </button>
+      </div>
+    </header>
+
+    <!-- ── TOAST NOTIFICATION ── -->
+    <div class="db-toast" id="dbToast">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <span id="dbToastMsg">Changes saved!</span>
+    </div>
+
+    <!-- ══════════════════════════════════
+         TAB: SHOWREEL VIDEOS
+    ══════════════════════════════════ -->
+    <section class="db-tab active" id="tab-showreel">
+      <div class="db-section-header">
+        <div>
+          <h2>Showreel Playlist</h2>
+          <p>These 5 videos appear in the playlist on the Showreel section of your website. Paste YouTube or Instagram links.</p>
+        </div>
+        <div class="db-url-legend">
+          <span class="db-badge db-badge-yt">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:12px;height:12px">
+              <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42C1 8.14 1 11.72 1 11.72s0 3.58.46 5.3a2.78 2.78 0 001.95 1.96C5.12 19.44 12 19.44 12 19.44s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96C23 15.3 23 11.72 23 11.72s0-3.58-.46-5.3z"/>
+              <polygon points="9.75 15.02 15.5 11.72 9.75 8.42 9.75 15.02"/>
+            </svg>
+            YouTube
+          </span>
+          <span class="db-badge db-badge-ig">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:12px;height:12px">
+              <rect x="2" y="2" width="20" height="20" rx="5"/>
+              <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/>
+            </svg>
+            Instagram
+          </span>
+          <span style="font-size:12px;color:var(--db-muted)">Both supported</span>
+        </div>
+      </div>
+
+      <div class="db-video-list" id="showreelList">
+        <!-- Items injected by JS -->
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         TAB: WORK CARDS
+    ══════════════════════════════════ -->
+    <section class="db-tab" id="tab-projects">
+      <div class="db-section-header">
+        <div>
+          <h2>Work Cards</h2>
+          <p>Each card has two URLs: a <strong>Preview URL</strong> (plays silently as the card background) and a <strong>Post URL</strong> (opens in popup when "View Project" is clicked).</p>
+        </div>
+      </div>
+
+      <div class="db-cards-grid" id="projectsList">
+        <!-- Items injected by JS -->
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════
+         TAB: PREVIEW PLAYER
+    ══════════════════════════════════ -->
+    <section class="db-tab" id="tab-preview">
+      <div class="db-section-header">
+        <div>
+          <h2>Preview Player</h2>
+          <p>Paste any YouTube or Instagram URL here and click Run to preview it instantly.</p>
+        </div>
+      </div>
+
+      <div class="db-preview-layout">
+        <!-- Controls -->
+        <div class="db-preview-controls">
+          <div class="db-preview-input-row">
+            <div class="db-field-wrap">
+              <label class="db-label">Video URL</label>
+              <div class="db-input-action">
+                <input
+                  type="url"
+                  id="previewUrl"
+                  class="db-input db-input-large"
+                  placeholder="https://www.youtube.com/watch?v=... or https://www.instagram.com/reel/..."
+                />
+                <button class="db-btn db-btn-primary db-btn-run" id="previewRunBtn">
+                  <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                  Run
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="db-quick-urls">
+            <span class="db-quick-label">Quick examples:</span>
+            <button class="db-quick-btn" data-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ">YouTube example</button>
+            <button class="db-quick-btn" data-url="https://www.instagram.com/p/Cwkc0yTIPjw/">Instagram post</button>
+          </div>
+
+          <div class="db-preview-url-info" id="previewUrlInfo" style="display:none">
+            <div class="db-url-badge" id="previewUrlBadge"></div>
+            <span id="previewUrlDisplay"></span>
+          </div>
+
+          <div class="db-preview-use-row" id="previewUseRow" style="display:none">
+            <span class="db-label" style="font-size:12px;margin-bottom:8px;display:block">Use this URL in:</span>
+            <div class="db-preview-use-btns">
+              <button class="db-btn db-btn-sm db-btn-secondary" id="previewUseShowreel">+ Add to Showreel</button>
+              <div class="db-preview-use-card">
+                <select class="db-select db-select-sm" id="previewUseCardSelect">
+                  <option value="">Select card slot…</option>
+                  <option value="card-1">Card 1</option>
+                  <option value="card-2">Card 2</option>
+                  <option value="card-3">Card 3</option>
+                  <option value="card-4">Card 4</option>
+                  <option value="card-5">Card 5</option>
+                  <option value="card-6">Card 6</option>
+                </select>
+                <button class="db-btn db-btn-sm db-btn-secondary" id="previewUseCardBtn">+ Add to Card</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Player frame -->
+        <div class="db-preview-player-wrap">
+          <div class="db-preview-player" id="previewPlayer">
+            <div class="db-preview-placeholder" id="previewPlaceholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                <circle cx="12" cy="12" r="10"/>
+                <polygon points="10 8 16 12 10 16 10 8"/>
+              </svg>
+              <p>Enter a URL above and click <strong>Run</strong></p>
+            </div>
+            <div class="db-preview-loader" id="previewLoader" style="display:none">
+              <div class="db-spinner"></div>
+              <span>Loading video…</span>
+            </div>
+            <iframe
+              id="previewIframe"
+              class="db-preview-iframe"
+              src=""
+              frameborder="0"
+              scrolling="no"
+              allowtransparency="true"
+              allowfullscreen="true"
+              allow="autoplay; encrypted-media; picture-in-picture"
+              style="display:none"
+            ></iframe>
+          </div>
+          <div class="db-preview-player-label" id="previewPlayerLabel"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
