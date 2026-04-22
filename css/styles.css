@@ -424,22 +424,12 @@ body.cursor-hover .cursor-follower { opacity: 0; }
   line-height: 0.9;
   letter-spacing: -0.01em;
   margin-bottom: 40px;
+  overflow: visible;
 }
-.title-line { overflow: hidden; }
-.word-mask { display: inline-block; overflow: hidden; }
-.word-inner {
-  display: inline-block;
-  animation: word-reveal 0.9s var(--ease-out) forwards;
-  will-change: transform;
-}
-.title-line:nth-child(1) .word-inner { animation-delay: 0.3s; }
-.title-line:nth-child(2) .word-inner { animation-delay: 0.5s; }
-.title-line:nth-child(3) .word-inner { animation-delay: 0.7s; }
+.title-line { overflow: visible; }
+.word-mask { display: inline-block; overflow: visible; }
+.word-inner { display: inline-block; overflow: visible; }
 .accent-word { color: var(--accent); }
-@keyframes word-reveal {
-  from { transform: translateY(110%); }
-  to   { transform: translateY(0);    }
-}
 
 .hero-subtitle {
   font-size: clamp(1rem, 2vw, 1.25rem);
@@ -1754,7 +1744,7 @@ video::-webkit-media-controls-panel     { display: none !important; }
                  0 0 140px rgba(232,196,106,0.08);
   }
 }
-.accent-word { animation: word-reveal 0.9s var(--ease-out) 0.5s forwards, accent-glow 3s ease-in-out 1.6s infinite; }
+.accent-word { animation: accent-glow 3s ease-in-out infinite; }
 
 /* ── Hero eyebrow shimmer ───────────────────────── */
 @keyframes eyebrow-shimmer {
