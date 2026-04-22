@@ -9,12 +9,16 @@
 
 /* ─────────────────────────────────────────────────────
    AUTH — SHA-256 login gate
-   Credentials are hashed in js/auth-config.js (gitignored).
-   Plain-text credentials are never stored in this file.
+   Only SHA-256 hashes are stored here — never plain text.
+   A hash cannot be reversed to recover the original value.
+   Session expires after 60 min or when the tab is closed.
 ───────────────────────────────────────────────────── */
 (function initAuth() {
+  /* SHA-256 hashes — these are NOT the credentials themselves */
+  const U_HASH       = '5eb60936c374c1be93fab792fc9946de3cd025da80961e605844feab4e55bb9b';
+  const P_HASH       = '5038dfba51e934eadf0dbb3c208bd111bddb6ec829634806046f344e146eb9de';
   const SESSION_KEY  = 'alterity_dash_session';
-  const SESSION_MINS = (typeof DASHBOARD_AUTH !== 'undefined' && DASHBOARD_AUTH.sessionMinutes) || 60;
+  const SESSION_MINS = 60;
 
   const loginScreen = document.getElementById('dbLoginScreen');
   const loginForm   = document.getElementById('dbLoginForm');
@@ -64,14 +68,14 @@
     loginScreen.classList.remove('hidden');
     loginUser.value = '';
     loginPass.value = '';
-    if (msg) { loginError.textContent = msg; }
+    loginError.textContent = msg || '';
     setTimeout(() => loginUser.focus(), 100);
   }
 
   /* ── Password visibility toggle ── */
   pwToggle.addEventListener('click', () => {
     const isHidden = loginPass.type === 'password';
-    loginPass.type  = isHidden ? 'text' : 'password';
+    loginPass.type        = isHidden ? 'text'  : 'password';
     eyeShow.style.display = isHidden ? 'none'  : '';
     eyeHide.style.display = isHidden ? ''      : 'none';
   });
@@ -83,26 +87,15 @@
     loginBtn.disabled = true;
     loginBtn.querySelector('svg').style.opacity = '0.4';
 
-    /* If auth-config.js failed to load, deny access */
-    if (typeof DASHBOARD_AUTH === 'undefined') {
-      loginError.textContent = 'Auth config missing. Add js/auth-config.js locally.';
-      loginBtn.disabled = false;
-      loginBtn.querySelector('svg').style.opacity = '';
-      return;
-    }
-
     const [uHash, pHash] = await Promise.all([
       sha256(loginUser.value.trim()),
       sha256(loginPass.value),
     ]);
 
-    const validUser = uHash === DASHBOARD_AUTH.usernameHash;
-    const validPass = pHash === DASHBOARD_AUTH.passwordHash;
-
     loginBtn.disabled = false;
     loginBtn.querySelector('svg').style.opacity = '';
 
-    if (validUser && validPass) {
+    if (uHash === U_HASH && pHash === P_HASH) {
       createSession();
       showDashboard();
     } else {
@@ -118,11 +111,10 @@
     showLogin('You have been logged out.');
   });
 
-  /* ── Check session on load ── */
+  /* ── Check existing session on load ── */
   if (isSessionValid()) {
     showDashboard();
   } else {
-    /* Keep login screen visible, focus username */
     setTimeout(() => loginUser.focus(), 200);
   }
 })();
