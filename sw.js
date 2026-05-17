@@ -1,16 +1,17 @@
 // Service Worker for Alterity Labs Portfolio
 // Caches static assets for faster repeat visits
+// Includes all animation-related assets (CSS, JS) for smooth performance
 
 const CACHE_NAME = 'alterity-labs-portfolio-v1';
 const urlsToCache = [
   '/',
   '/index.html',
   '/dashboard.html',
-  '/css/styles.css',
-  '/css/dashboard.css',
-  '/js/script.js',
-  '/js/instagram-config.js',
-  '/js/dashboard.js',
+  '/css/styles.css',          // Contains all CSS animations
+  '/css/dashboard.css',       // Dashboard CSS animations
+  '/js/script.js',            // Main JS including animations
+  '/js/instagram-config.js',  // Video configuration
+  '/js/dashboard.js',         // Dashboard logic and animations
   // Add any other static assets here
 ];
 
