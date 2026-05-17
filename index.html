@@ -924,9 +924,23 @@
     </div>
   </div>
 
-  <!-- Instagram embed script (loads lazily) -->
-  <script async defer src="//www.instagram.com/embed.js"></script>
-  <script src="js/instagram-config.js"></script>
-  <script src="js/script.js"></script>
+   <!-- Instagram embed script (loads lazily) -->
+   <script async defer src="//www.instagram.com/embed.js"></script>
+   <script src="js/instagram-config.js"></script>
+   <script src="js/script.js"></script>
+   <!-- Service Worker Registration -->
+   <script>
+     if ('serviceWorker' in navigator) {
+       window.addEventListener('load', () => {
+         navigator.serviceWorker.register('/sw.js')
+           .then(registration => {
+             console.log('ServiceWorker registration successful with scope: ', registration.scope);
+           })
+           .catch(err => {
+             console.log('ServiceWorker registration failed: ', err);
+           });
+       });
+     }
+   </script>
 </body>
 </html>
