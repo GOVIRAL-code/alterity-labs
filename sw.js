@@ -2,7 +2,7 @@
 // Caches static assets for faster repeat visits
 // Includes all animation-related assets (CSS, JS) for smooth performance
 
-const CACHE_NAME = 'alterity-labs-portfolio-v5';
+const CACHE_NAME = 'alterity-labs-portfolio-v6';
 const urlsToCache = [
   '/',
   '/index.html',

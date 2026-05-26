@@ -5,6 +5,42 @@
 
 'use strict';
 
+// Sync dashboard configuration from localStorage into INSTAGRAM_CONFIG if present
+(function syncConfig() {
+  if (typeof window.INSTAGRAM_CONFIG === 'undefined') return;
+  try {
+    const raw = localStorage.getItem('alterity_video_config');
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed) {
+        if (parsed.showreelPosts && window.INSTAGRAM_CONFIG.showreelPosts) {
+          parsed.showreelPosts.forEach((post, i) => {
+            if (i < window.INSTAGRAM_CONFIG.showreelPosts.length) {
+              window.INSTAGRAM_CONFIG.showreelPosts[i].url = post.url || window.INSTAGRAM_CONFIG.showreelPosts[i].url;
+              window.INSTAGRAM_CONFIG.showreelPosts[i].label = post.label || window.INSTAGRAM_CONFIG.showreelPosts[i].label;
+              window.INSTAGRAM_CONFIG.showreelPosts[i].time = post.time || window.INSTAGRAM_CONFIG.showreelPosts[i].time;
+            }
+          });
+        }
+        if (parsed.projects && window.INSTAGRAM_CONFIG.projects) {
+          parsed.projects.forEach((proj, i) => {
+            const match = window.INSTAGRAM_CONFIG.projects.find(p => p.id === proj.id);
+            if (match) {
+              match.postUrl = proj.postUrl || match.postUrl;
+              match.previewUrl = proj.previewUrl || match.previewUrl;
+            }
+          });
+        }
+        if (parsed.profileUrl) {
+          window.INSTAGRAM_CONFIG.profileUrl = parsed.profileUrl;
+        }
+      }
+    }
+  } catch (e) {
+    console.warn('Failed to sync localStorage with INSTAGRAM_CONFIG:', e);
+  }
+})();
+
 /* ─────────────────────────────────────────────────────
    1. LOADER
 ───────────────────────────────────────────────────── */
@@ -419,7 +455,7 @@ function startPageAnimations() {
       const featured = document.querySelector('.work-card.featured');
       if (featured) {
         if (filter === 'all' || featured.dataset.category === filter) {
-          featured.style.gridColumn = (filter === 'all') ? 'span 3' : 'span 1';
+          featured.style.gridColumn = 'span 12';
         }
       }
     });
@@ -910,14 +946,11 @@ function ytId(url) {
       }
       card.setAttribute('data-ratio', ratio);
 
-      /* 1. Inject background preview iframe with delay on hover */
+      /* 1. Inject background preview iframe with delay on hover, unload on leave */
       if (iframe && isReal(proj.previewUrl)) {
         let hoverTimer;
-        let iframeLoaded = false;
         card.addEventListener('mouseenter', () => {
-          if (iframeLoaded) return;
           hoverTimer = setTimeout(() => {
-            iframeLoaded = true;
             // Always attach event listener before setting src to avoid race conditions
             iframe.onload = () => {
               iframe.classList.add('loaded');
@@ -929,6 +962,11 @@ function ytId(url) {
         });
         card.addEventListener('mouseleave', () => {
           clearTimeout(hoverTimer);
+          iframe.src = '';
+          iframe.classList.remove('loaded');
+          iframe.onload = null;
+          const bg = card.querySelector('.card-video-bg');
+          if (bg) bg.style.opacity = '1';
         });
       }
 
