@@ -66,8 +66,7 @@
   document.addEventListener('mousemove', (e) => {
     mouseX = e.clientX;
     mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top  = mouseY + 'px';
+    cursor.style.translate = `${mouseX}px ${mouseY}px 0px`;
     if (!rafRunning) {
       rafRunning = true;
       requestAnimationFrame(animateFollower);
@@ -87,8 +86,7 @@
   function animateFollower() {
     follX += (mouseX - follX) * 0.12;
     follY += (mouseY - follY) * 0.12;
-    follower.style.left = follX + 'px';
-    follower.style.top  = follY + 'px';
+    follower.style.translate = `${follX}px ${follY}px 0px`;
     requestAnimationFrame(animateFollower);
   }
 
@@ -186,15 +184,30 @@
     particles = Array.from({ length: 60 }, () => new Particle()); // reduced from 120
   }
 
+  let rafId;
+  let isVisible = true;
+
   function animate() {
+    if (!isVisible) return;
     ctx.clearRect(0, 0, W, H);
     particles.forEach(p => { p.update(); p.draw(); });
-    requestAnimationFrame(animate);
+    rafId = requestAnimationFrame(animate);
   }
 
   window.addEventListener('resize', resize, { passive: true });
   init();
-  animate();
+  
+  const heroSection = document.querySelector('.hero');
+  if (heroSection) {
+    const heroObserver = new IntersectionObserver((entries) => {
+      isVisible = entries[0].isIntersecting;
+      if (isVisible) animate();
+      else cancelAnimationFrame(rafId);
+    }, { threshold: 0 });
+    heroObserver.observe(heroSection);
+  } else {
+    animate();
+  }
 })();
 
 /* ─────────────────────────────────────────────────────
@@ -359,9 +372,9 @@ function startPageAnimations() {
     if (!ticking) {
       requestAnimationFrame(() => {
         const y = window.scrollY;
-        document.querySelectorAll('.orb-1, .orb-2').forEach((orb, i) => {
+        document.querySelectorAll('.orb-wrapper').forEach((orb, i) => {
           const speed = i === 0 ? 0.08 : 0.05;
-          orb.style.transform = `translateY(${y * speed}px)`;
+          orb.style.transform = `translate3d(0, ${y * speed}px, 0)`;
         });
         ticking = false;
       });
@@ -461,7 +474,7 @@ function startPageAnimations() {
     if (type === 'youtube') {
       const id = getYouTubeId(url);
       if (!id) return '';
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&rel=0&playlist=${id}&controls=0&modestbranding=1`;
+      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&rel=0&playlist=${id}&controls=0&modestbranding=1`;
     }
 
     if (type === 'instagram') {
@@ -816,17 +829,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   // Enforce on all existing videos
   document.querySelectorAll('video').forEach(enforcePlay);
 
-  // Watch for any videos added dynamically (e.g. inside iframes injected later)
-  const mo = new MutationObserver(mutations => {
-    mutations.forEach(m => {
-      m.addedNodes.forEach(node => {
-        if (node.tagName === 'VIDEO') enforcePlay(node);
-        if (node.querySelectorAll) node.querySelectorAll('video').forEach(enforcePlay);
-      });
-    });
-  });
-  mo.observe(document.body, { childList: true, subtree: true });
-
   // Poster: user gesture re-triggers play on mobile
   document.addEventListener('touchstart', () => {
     document.querySelectorAll('video').forEach(v => {
@@ -838,23 +840,29 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 /* ─────────────────────────────────────────────────────
    22b. BACKGROUND NOISE ANIMATION (desktop only)
 ───────────────────────────────────────────────────── */
-(function initGrainAnim() {
-  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-  if (isTouch) return; // skip on mobile — causes constant repaints
+// Removed JS-based grain animation. Handled by GPU-accelerated CSS now.
 
-  const grains = document.querySelectorAll('.grain');
-  let frame = 0;
-  function flicker() {
-    frame++;
-    if (frame % 3 === 0) {
-      grains.forEach(g => {
-        g.style.transform = `translate(${(Math.random()-0.5)*4}px, ${(Math.random()-0.5)*4}px)`;
-      });
-    }
-    requestAnimationFrame(flicker);
-  }
-  flicker();
-})();
+/* Helper: detect type */
+function urlType(url) {
+  if (!url) return null;
+  if (/youtu\.be\/|youtube\.com/.test(url)) return 'youtube';
+  if (/instagram\.com/.test(url))           return 'instagram';
+  return null;
+}
+
+/* Helper: extract YouTube ID */
+function ytId(url) {
+  if (!url) return null;
+  let m = url.match(/youtu\.be\/([^?&#]+)/);
+  if (m) return m[1];
+  m = url.match(/\/shorts\/([^?&#]+)/);
+  if (m) return m[1];
+  m = url.match(/\/embed\/([^?&#]+)/);
+  if (m) return m[1];
+  m = url.match(/[?&]v=([^?&#]+)/);
+  if (m) return m[1];
+  return null;
+}
 
 /* ─────────────────────────────────────────────────────
    23. INSTAGRAM CONFIG — wire up post URLs
@@ -863,30 +871,19 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   if (typeof INSTAGRAM_CONFIG === 'undefined') return;
   const cfg = INSTAGRAM_CONFIG;
 
-  /* Helper: detect type */
-  function urlType(url) {
-    if (!url) return null;
-    if (/youtu\.be\/|youtube\.com/.test(url)) return 'youtube';
-    if (/instagram\.com/.test(url))           return 'instagram';
-    return null;
-  }
-
-  /* Helper: extract YouTube ID */
-  function ytId(url) {
-    const m = url.match(/youtu\.be\/([^?&]+)|shorts\/([^?&]+)|[?&]v=([^?&]+)|embed\/([^?&]+)/);
-    return m ? (m[1] || m[2] || m[3] || m[4]) : null;
-  }
-
   /* Helper: URL → embed src with autoplay */
   function toEmbed(url) {
+    if (!url) return '';
     const t = urlType(url);
     if (t === 'youtube') {
       const id = ytId(url);
       if (!id) return '';
-      return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&controls=0&rel=0&playlist=${id}&modestbranding=1`;
+      return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
     }
-    // Instagram
-    return url.trim().replace(/\/$/, '') + '/embed/?autoplay=1&muted=1';
+    if (t === 'instagram') {
+      return url.trim().replace(/\/$/, '') + '/embed/?autoplay=1&muted=1';
+    }
+    return '';
   }
 
   /* Helper: check if a URL is real (not a placeholder and not empty) */
@@ -903,16 +900,36 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       const link    = card.querySelector('.card-link');
       const iframe  = document.getElementById(`card-iframe-${i + 1}`);
 
-      /* 1. Inject background preview iframe */
+      /* 0. Dynamic aspect ratio detection */
+      let ratio = 'landscape';
+      if (isReal(proj.previewUrl)) {
+        const lowerUrl = proj.previewUrl.toLowerCase();
+        if (lowerUrl.includes('/shorts/') || lowerUrl.includes('instagram.com') || lowerUrl.includes('/reel/')) {
+          ratio = 'portrait';
+        }
+      }
+      card.setAttribute('data-ratio', ratio);
+
+      /* 1. Inject background preview iframe with delay on hover */
       if (iframe && isReal(proj.previewUrl)) {
-        iframe.src = toEmbed(proj.previewUrl);
-        iframe.onload = () => iframe.classList.add('loaded');
-        /* Fade in gradient bg out once iframe loaded */
-        iframe.onload = () => {
-          iframe.classList.add('loaded');
-          const bg = card.querySelector('.card-video-bg');
-          if (bg) bg.style.opacity = '0';
-        };
+        let hoverTimer;
+        let iframeLoaded = false;
+        card.addEventListener('mouseenter', () => {
+          if (iframeLoaded) return;
+          hoverTimer = setTimeout(() => {
+            iframeLoaded = true;
+            // Always attach event listener before setting src to avoid race conditions
+            iframe.onload = () => {
+              iframe.classList.add('loaded');
+              const bg = card.querySelector('.card-video-bg');
+              if (bg) bg.style.opacity = '0';
+            };
+            iframe.src = toEmbed(proj.previewUrl);
+          }, 200);
+        });
+        card.addEventListener('mouseleave', () => {
+          clearTimeout(hoverTimer);
+        });
       }
 
       /* 2. Wire "View Project" to open modal */
@@ -944,8 +961,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   if (!modal) return;
 
   window.openIgModal = function(postUrl) {
-    // Show loading
-    inner.innerHTML = '<div class="ig-modal-loading">Loading Instagram Post…</div>';
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
 
@@ -953,6 +968,34 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       showNotConfigured();
       return;
     }
+
+    const t = urlType(postUrl);
+    if (t === 'youtube') {
+      const id = ytId(postUrl);
+      if (!id) {
+        inner.innerHTML = '<div class="ig-modal-loading">Invalid YouTube URL</div>';
+        return;
+      }
+      const isShort = postUrl.includes('/shorts/');
+      const aspect = isShort ? '9/16' : '16/9';
+      const maxWidth = isShort ? '360px' : '800px';
+
+      inner.innerHTML = `
+        <div class="modal-video-wrapper" style="position:relative; width:100%; aspect-ratio:${aspect}; max-width:${maxWidth}; margin:0 auto; background:#000; border-radius:8px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.1);">
+          <iframe 
+            src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1" 
+            style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" 
+            allow="autoplay; encrypted-media; picture-in-picture" 
+            referrerpolicy="strict-origin-when-cross-origin"
+            allowfullscreen>
+          </iframe>
+        </div>`;
+      return;
+    }
+
+    // Instagram
+    // Show loading
+    inner.innerHTML = '<div class="ig-modal-loading">Loading Instagram Post…</div>';
 
     // Inject official Instagram embed blockquote
     const clean = postUrl.split('?')[0].replace(/\/$/, '');

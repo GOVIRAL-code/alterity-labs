@@ -269,7 +269,7 @@ function toEmbedUrl(url) {
   if (type === 'youtube') {
     const id = getYouTubeId(url);
     if (!id) return '';
-    return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&rel=0&playlist=${id}&controls=1&modestbranding=1`;
+    return `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&mute=1&loop=1&rel=0&playlist=${id}&controls=1&modestbranding=1`;
   }
   if (type === 'instagram') {
     const clean = url.trim().replace(/\/$/, '');
