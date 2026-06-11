@@ -7,7 +7,7 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html {
   scroll-behavior: smooth;
-  font-size: clamp(14px, 0.35vw + 11.5px, 18px);
+  font-size: 16px;
   overflow-x: hidden;
   -webkit-tap-highlight-color: transparent; /* remove tap flash on mobile */
 }
@@ -47,13 +47,13 @@ ul { list-style: none; }
   --font-hero: 'Bebas Neue', sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
-
-  /* Fluid Spacing Scale */
-  --space-xs: clamp(8px, 0.8vw + 4px, 12px);
-  --space-sm: clamp(12px, 1.2vw + 6px, 18px);
-  --space-md: clamp(16px, 2vw + 8px, 32px);
-  --space-lg: clamp(32px, 4vw + 12px, 64px);
-  --space-xl: clamp(64px, 6vw + 24px, 128px);
+  /* Fluid Spacing Scale (rem-based for zoom compatibility) */
+  --space-xs: 0.5rem;
+  --space-sm: 0.875rem;
+  --space-md: 1.5rem;
+  --space-lg: 3rem;
+  --space-xl: 6rem;
+  --container-max: 1400px;
 }
 
 /* ══════════════════════════════════════════════════
@@ -1997,11 +1997,13 @@ video::-webkit-media-controls-panel     { display: none !important; }
    RESPONSIVE
 ══════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
+  html { font-size: 15px; }
   .work-grid { grid-template-columns: repeat(6, 1fr); }
   .work-card.featured { grid-column: span 6; grid-template-columns: 1fr; }
   .work-card[data-ratio="portrait"] { grid-column: span 3; }
   .work-card[data-ratio="landscape"], .work-card { grid-column: span 6; }
-  .featured .card-media { min-height: 260px; }
+  .featured .card-media { min-height: unset; height: auto; aspect-ratio: 16/9; }
+  .featured .card-info { padding: 2rem; }
   .skills-grid { grid-template-columns: repeat(3, 1fr); }
   .about-container { grid-template-columns: 1fr; gap: 60px; }
   .about-img-placeholder { max-width: 360px; }
@@ -2009,6 +2011,7 @@ video::-webkit-media-controls-panel     { display: none !important; }
 }
 
 @media (max-width: 768px) {
+  html { font-size: 14px; }
   .nav-links, .nav-cta { display: none; }
   .burger { display: flex; }
   .work-grid { grid-template-columns: 1fr; }
@@ -2018,6 +2021,7 @@ video::-webkit-media-controls-panel     { display: none !important; }
   .work-card {
     grid-column: span 1 !important;
   }
+  .work-card[data-ratio="portrait"] .card-media { aspect-ratio: 3/4; }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .hero-stats { gap: 24px; }
   .filmstrip { display: none; }
@@ -2025,6 +2029,7 @@ video::-webkit-media-controls-panel     { display: none !important; }
 }
 
 @media (max-width: 480px) {
+  html { font-size: 13px; }
   .skills-grid { grid-template-columns: 1fr; }
   .hero-ctas { flex-direction: column; align-items: flex-start; }
   .footer-bottom { flex-direction: column; align-items: flex-start; }

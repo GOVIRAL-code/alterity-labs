@@ -32,8 +32,8 @@ html, body {
   height: 100%;
   background: var(--db-bg);
   color: var(--db-text);
-  font-family: 'Plus Jakarta Sans', 'Space Grotesk', sans-serif;
-  font-size: clamp(13px, 0.2vw + 12px, 15px);
+  font-family: 'Inter', 'Space Grotesk', sans-serif;
+  font-size: 14px;
   line-height: 1.5;
   overflow-x: hidden;
 }
