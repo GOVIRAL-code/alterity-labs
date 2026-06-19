@@ -298,9 +298,9 @@ function animateCounter(el) {
     const progress = Math.min((ts - start) / duration, 1);
     // quartic ease-out — fast start, graceful finish
     const eased = 1 - Math.pow(1 - progress, 4);
-    el.textContent = Math.floor(eased * target);
+    el.textContent = Math.floor(eased * target).toLocaleString();
     if (progress < 1) requestAnimationFrame(update);
-    else el.textContent = target;
+    else el.textContent = target.toLocaleString();
   }
   requestAnimationFrame(update);
 }
