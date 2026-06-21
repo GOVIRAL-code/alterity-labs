@@ -201,7 +201,7 @@ const isLocalFile = window.location.protocol === 'file:';
       this.vx = (Math.random() - 0.5) * 0.3;
       this.vy = (Math.random() - 0.5) * 0.3 - 0.1;
       this.alpha = Math.random() * 0.5 + 0.1;
-      this.color = Math.random() > 0.7 ? '#e8c46a' : '#ffffff';
+      this.color = Math.random() > 0.7 ? '#2b66ff' : (Math.random() > 0.85 ? '#ff4757' : '#ffffff');
     }
     update() {
       this.x += this.vx;
@@ -587,16 +587,16 @@ function startPageAnimations() {
         notice.innerHTML = `
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
             background:linear-gradient(135deg,#0a0a12 0%,#141428 50%,#0d0d1a 100%);border-radius:8px;padding:32px;text-align:center;z-index:10;">
-            <div style="width:64px;height:64px;border-radius:50%;background:rgba(232,196,106,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#e8c46a" stroke-width="1.5" style="width:28px;height:28px;">
+            <div style="width:64px;height:64px;border-radius:50%;background:rgba(43,102,255,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:20px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#2b66ff" stroke-width="1.5" style="width:28px;height:28px;">
                 <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42C1 8.14 1 11.72 1 11.72s0 3.58.46 5.3a2.78 2.78 0 001.95 1.96C5.12 19.44 12 19.44 12 19.44s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96C23 15.3 23 11.72 23 11.72s0-3.58-.46-5.3z"/>
                 <polygon points="9.75 15.02 15.5 11.72 9.75 8.42 9.75 15.02"/>
               </svg>
             </div>
-            <p style="color:#e8c46a;font-size:0.85rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 8px;">Local Preview Mode</p>
+            <p style="color:#2b66ff;font-size:0.85rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 8px;">Local Preview Mode</p>
             <p style="color:#999;font-size:0.82rem;line-height:1.6;margin:0 0 20px;max-width:280px;">YouTube embeds require a web server. Use <strong style="color:#ccc;">Live Server</strong> or click below to watch directly.</p>
-            <a href="#" class="sr-local-yt-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:rgba(232,196,106,0.15);
-              color:#e8c46a;border:1px solid rgba(232,196,106,0.3);border-radius:4px;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;
+            <a href="#" class="sr-local-yt-btn" style="display:inline-flex;align-items:center;gap:8px;padding:10px 24px;background:rgba(43,102,255,0.15);
+              color:#2b66ff;border:1px solid rgba(43,102,255,0.3);border-radius:4px;font-size:0.78rem;font-weight:600;letter-spacing:0.06em;
               text-transform:uppercase;text-decoration:none;transition:all 0.3s;">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;">
                 <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
@@ -1080,16 +1080,16 @@ function ytId(url) {
           <div class="modal-video-wrapper" style="position:relative; width:100%; aspect-ratio:${aspect}; max-width:${maxWidth}; margin:0 auto; background:#000; border-radius:8px; overflow:hidden; box-shadow:0 10px 40px rgba(0,0,0,0.8); border:1px solid rgba(255,255,255,0.1);">
             <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
               background:linear-gradient(135deg,#0a0a12 0%,#141428 50%,#0d0d1a 100%);padding:24px;text-align:center;">
-              <div style="width:56px;height:56px;border-radius:50%;background:rgba(232,196,106,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
-                <svg viewBox="0 0 24 24" fill="none" stroke="#e8c46a" stroke-width="1.5" style="width:24px;height:24px;">
+              <div style="width:56px;height:56px;border-radius:50%;background:rgba(43,102,255,0.12);display:flex;align-items:center;justify-content:center;margin-bottom:16px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#2b66ff" stroke-width="1.5" style="width:24px;height:24px;">
                   <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42C1 8.14 1 11.72 1 11.72s0 3.58.46 5.3a2.78 2.78 0 001.95 1.96C5.12 19.44 12 19.44 12 19.44s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.96C23 15.3 23 11.72 23 11.72s0-3.58-.46-5.3z"/>
                   <polygon points="9.75 15.02 15.5 11.72 9.75 8.42 9.75 15.02"/>
                 </svg>
               </div>
-              <p style="color:#e8c46a;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 6px;">Local Preview Mode</p>
+              <p style="color:#2b66ff;font-size:0.8rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin:0 0 6px;">Local Preview Mode</p>
               <p style="color:#999;font-size:0.78rem;line-height:1.5;margin:0 0 16px;max-width:260px;">YouTube embeds require a web server to load. Click below to watch this video directly on YouTube.</p>
-              <a href="${postUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 20px;background:rgba(232,196,106,0.15);
-                color:#e8c46a;border:1px solid rgba(232,196,106,0.3);border-radius:4px;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;
+              <a href="${postUrl}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;padding:8px 20px;background:rgba(43,102,255,0.15);
+                color:#2b66ff;border:1px solid rgba(43,102,255,0.3);border-radius:4px;font-size:0.75rem;font-weight:600;letter-spacing:0.06em;
                 text-transform:uppercase;text-decoration:none;transition:all 0.3s;">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px;">
                   <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
@@ -1170,5 +1170,5 @@ function ytId(url) {
   });
 })();
 
-console.log('%cAlterity Labs — Video Experts for Brands That Want to Stand Out', 'color:#e8c46a;font-family:monospace;font-size:14px;font-weight:bold;');
+console.log('%cAlterity Labs — Video Experts for Brands That Want to Stand Out', 'color:#2b66ff;font-family:monospace;font-size:14px;font-weight:bold;');
 console.log('%cVideo-first creative agency. Built for brands that grow.', 'color:#888;font-size:11px;');
