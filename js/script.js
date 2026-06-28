@@ -186,6 +186,21 @@ const isLocalFile = window.location.protocol === 'file:';
 
   const ctx = canvas.getContext('2d');
   let W, H, particles = [];
+  let mouse = { x: null, y: null, radius: 180 };
+
+  // Track mouse coordinates on hero section for gravity field
+  const heroEl = document.querySelector('.hero');
+  if (heroEl) {
+    heroEl.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    heroEl.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+  }
 
   function resize() {
     W = canvas.width  = canvas.offsetWidth;
@@ -197,16 +212,43 @@ const isLocalFile = window.location.protocol === 'file:';
     reset() {
       this.x  = Math.random() * W;
       this.y  = Math.random() * H;
-      this.r  = Math.random() * 1.5 + 0.3;
-      this.vx = (Math.random() - 0.5) * 0.3;
-      this.vy = (Math.random() - 0.5) * 0.3 - 0.1;
-      this.alpha = Math.random() * 0.5 + 0.1;
-      this.color = Math.random() > 0.7 ? '#2b66ff' : (Math.random() > 0.85 ? '#ff4757' : '#ffffff');
+      this.r  = Math.random() * 1.8 + 0.4;
+      this.baseVx = (Math.random() - 0.5) * 0.4;
+      this.baseVy = (Math.random() - 0.5) * 0.4 - 0.08;
+      this.vx = this.baseVx;
+      this.vy = this.baseVy;
+      this.alpha = Math.random() * 0.5 + 0.2;
+      this.color = Math.random() > 0.65 ? '#2b66ff' : (Math.random() > 0.85 ? '#ff4757' : '#ffffff');
     }
     update() {
+      // Interactive gravity pull
+      if (mouse.x !== null && mouse.y !== null) {
+        let dx = mouse.x - this.x;
+        let dy = mouse.y - this.y;
+        let dist = Math.hypot(dx, dy);
+        
+        if (dist < mouse.radius) {
+          let force = (mouse.radius - dist) / mouse.radius;
+          // Magnetically pull nodes to cursor
+          this.vx += (dx / dist) * force * 0.12;
+          this.vy += (dy / dist) * force * 0.12;
+        }
+      }
+
+      // Apply drag to restore baseline drift speeds
+      this.vx *= 0.95;
+      this.vy *= 0.95;
+      this.vx += (this.baseVx - this.vx) * 0.05;
+      this.vy += (this.baseVy - this.vy) * 0.05;
+
       this.x += this.vx;
       this.y += this.vy;
-      if (this.y < -2 || this.x < -2 || this.x > W + 2) this.reset();
+
+      // wrap edges
+      if (this.x < -10) this.x = W + 10;
+      if (this.x > W + 10) this.x = -10;
+      if (this.y < -10) this.y = H + 10;
+      if (this.y > H + 10) this.y = -10;
     }
     draw() {
       ctx.beginPath();
@@ -220,7 +262,7 @@ const isLocalFile = window.location.protocol === 'file:';
 
   function init() {
     resize();
-    particles = Array.from({ length: 60 }, () => new Particle()); // reduced from 120
+    particles = Array.from({ length: 80 }, () => new Particle());
   }
 
   let rafId;
@@ -229,7 +271,47 @@ const isLocalFile = window.location.protocol === 'file:';
   function animate() {
     if (!isVisible) return;
     ctx.clearRect(0, 0, W, H);
+
+    // 1. Draw connections first so they render underneath particles
+    for (let i = 0; i < particles.length; i++) {
+      const p1 = particles[i];
+      for (let j = i + 1; j < particles.length; j++) {
+        const p2 = particles[j];
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(p2.x, p2.y);
+          // Connect in Cobalt Blue accent
+          ctx.strokeStyle = `rgba(43, 102, 255, ${(1 - dist / 100) * 0.12})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+
+      // 2. Draw connections to mouse
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = p1.x - mouse.x;
+        const dy = p1.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 130) {
+          ctx.beginPath();
+          ctx.moveTo(p1.x, p1.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          // Laser links to cursor in Crimson Orange accent
+          ctx.strokeStyle = `rgba(255, 71, 87, ${(1 - dist / 130) * 0.18})`;
+          ctx.lineWidth = 0.7;
+          ctx.stroke();
+        }
+      }
+    }
+
+    // 3. Draw particles
     particles.forEach(p => { p.update(); p.draw(); });
+
     rafId = requestAnimationFrame(animate);
   }
 
@@ -1002,29 +1084,15 @@ function ytId(url) {
       }
       card.setAttribute('data-ratio', ratio);
 
-      /* 1. Inject background preview iframe with delay on hover, unload on leave */
+      /* 1. Inject background preview iframe immediately to play constantly on loop */
       /* Skip iframe previews on file:// — they trigger YouTube Error 153 */
       if (iframe && isReal(proj.previewUrl) && !isLocalFile) {
-        let hoverTimer;
-        card.addEventListener('mouseenter', () => {
-          hoverTimer = setTimeout(() => {
-            // Always attach event listener before setting src to avoid race conditions
-            iframe.onload = () => {
-              iframe.classList.add('loaded');
-              const bg = card.querySelector('.card-video-bg');
-              if (bg) bg.style.opacity = '0';
-            };
-            iframe.src = toEmbed(proj.previewUrl);
-          }, 200);
-        });
-        card.addEventListener('mouseleave', () => {
-          clearTimeout(hoverTimer);
-          iframe.src = '';
-          iframe.classList.remove('loaded');
-          iframe.onload = null;
+        iframe.onload = () => {
+          iframe.classList.add('loaded');
           const bg = card.querySelector('.card-video-bg');
-          if (bg) bg.style.opacity = '1';
-        });
+          if (bg) bg.style.opacity = '0';
+        };
+        iframe.src = toEmbed(proj.previewUrl);
       }
 
       /* 2. Wire "View Project" to open modal */
@@ -1167,6 +1235,141 @@ function ytId(url) {
   backdrop.addEventListener('click', closeModal);
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeModal();
+  });
+})();
+
+/* ─────────────────────────────────────────────────────
+   25. DYNAMIC HERO PARALLAX (3D DEPTH)
+   Translates hero text and wrapper orbs in relation to the cursor coordinate
+───────────────────────────────────────────────────── */
+(function initParallax() {
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (isTouch || window.innerWidth < 768) return;
+
+  const hero = document.querySelector('.hero');
+  const heroContent = document.querySelector('.hero-content');
+  const ow1 = document.querySelector('.ow-1');
+  const ow2 = document.querySelector('.ow-2');
+  const ow3 = document.querySelector('.ow-3');
+
+  if (!hero) return;
+
+  let targetX = 0, targetY = 0;
+  let currentX = 0, currentY = 0;
+
+  hero.addEventListener('mousemove', (e) => {
+    const rect = hero.getBoundingClientRect();
+    const nx = (e.clientX - rect.left) / rect.width - 0.5;
+    const ny = (e.clientY - rect.top) / rect.height - 0.5;
+
+    targetX = nx * 35; // Max movement in pixels
+    targetY = ny * 35;
+  });
+
+  hero.addEventListener('mouseleave', () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  function animate() {
+    currentX += (targetX - currentX) * 0.08;
+    currentY += (targetY - currentY) * 0.08;
+
+    if (heroContent) {
+      heroContent.style.transform = `translate(${currentX * 0.22}px, ${currentY * 0.22}px)`;
+    }
+    // Background orbs wrappers move in opposite direction for physical 3D depth parallax
+    if (ow1) {
+      ow1.style.transform = `translate(${currentX * -0.5}px, ${currentY * -0.5}px)`;
+    }
+    if (ow2) {
+      ow2.style.transform = `translate(${currentX * 0.35}px, ${currentY * -0.35}px)`;
+    }
+    if (ow3) {
+      ow3.style.transform = `translate(${currentX * -0.25}px, ${currentY * 0.25}px)`;
+    }
+
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ─────────────────────────────────────────────────────
+   26. STRIPE-STYLE SPOTLIGHT CARD TRACKER
+   Calculates coordinates inside cards and sets CSS properties
+───────────────────────────────────────────────────── */
+(function initSpotlights() {
+  const cards = document.querySelectorAll('.service-card, .work-card');
+  cards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      card.style.setProperty('--mouse-x', `${x}px`);
+      card.style.setProperty('--mouse-y', `${y}px`);
+    });
+  });
+})();
+
+/* ─────────────────────────────────────────────────────
+   27. MAGNETIC BUTTONS (Lerped Spring Physics)
+   Pulls CTA buttons magnetically toward the cursor
+───────────────────────────────────────────────────── */
+(function initMagneticButtons() {
+  const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  if (isTouch || window.innerWidth < 768) return;
+
+  const magnets = document.querySelectorAll('.btn-primary, .btn-showreel, .nav-link, .social-link');
+  magnets.forEach(btn => {
+    let x = 0, y = 0;
+    let targetX = 0, targetY = 0;
+    let hovering = false;
+    let rafId;
+
+    btn.addEventListener('mousemove', (e) => {
+      const rect = btn.getBoundingClientRect();
+      // Distance from center of button
+      const mouseX = e.clientX - rect.left - rect.width / 2;
+      const mouseY = e.clientY - rect.top - rect.height / 2;
+      // Drift maximum 35% of offset distance
+      targetX = mouseX * 0.35;
+      targetY = mouseY * 0.35;
+    });
+
+    btn.addEventListener('mouseenter', () => {
+      hovering = true;
+      btn.style.transition = 'none'; // Disable static transitions for smooth lerp
+      function loop() {
+        if (!hovering) return;
+        x += (targetX - x) * 0.15;
+        y += (targetY - y) * 0.15;
+        btn.style.transform = `translate(${x}px, ${y}px)`;
+        if (btn.querySelector('.btn-bg')) {
+          btn.querySelector('.btn-bg').style.transform = `translate(${x * 0.4}px, ${y * 0.4}px)`;
+        }
+        rafId = requestAnimationFrame(loop);
+      }
+      loop();
+    });
+
+    btn.addEventListener('mouseleave', () => {
+      hovering = false;
+      cancelAnimationFrame(rafId);
+      // Smooth return transition
+      btn.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+      btn.style.transform = '';
+      const bg = btn.querySelector('.btn-bg');
+      if (bg) {
+        bg.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+        bg.style.transform = '';
+      }
+      setTimeout(() => {
+        btn.style.transition = '';
+        if (bg) bg.style.transition = '';
+      }, 500);
+      x = 0; y = 0;
+      targetX = 0; targetY = 0;
+    });
   });
 })();
 
