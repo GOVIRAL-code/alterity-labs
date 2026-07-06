@@ -2027,7 +2027,17 @@ video::-webkit-media-controls-panel     { display: none !important; }
 
 /* ══════════════════════════════════════════════════
    RESPONSIVE
+   Breakpoints:
+     1024px — Tablet landscape / large tablet
+      768px — Tablet portrait / large phones
+      600px — Medium phones (Galaxy S, Pixel, etc.)
+      480px — Small–mid phones (iPhone SE 2nd gen, older Android)
+      390px — Modern flagship phones (iPhone 15/14/13, Pixel 7)
+      360px — Small modern phones (Galaxy A series, mid-range)
+      320px — Minimum support (iPhone SE 1st gen)
 ══════════════════════════════════════════════════ */
+
+/* ── 1024px: Tablet landscape ─────────────────── */
 @media (max-width: 1024px) {
   html { font-size: 15px; }
   .work-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -2049,31 +2059,317 @@ video::-webkit-media-controls-panel     { display: none !important; }
   .services-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ── 768px: Tablet portrait / large phones ────── */
 @media (max-width: 768px) {
   html { font-size: 14px; }
+
+  /* Nav */
   .nav-links, .nav-cta { display: none; }
   .burger { display: flex; }
+
+  /* Hero */
+  .hero { padding: 100px 5vw 0; min-height: 100svh; }
+  .hero-content { padding-bottom: var(--space-lg); }
+  .hero-title { font-size: clamp(3rem, 12vw, 5.5rem); }
+  .hero-subtitle { font-size: clamp(0.9rem, 2.5vw, 1.05rem); }
+  .hero-stats { gap: 24px; }
+  .scroll-indicator { display: none; }
+
+  /* Showreel */
+  .showreel { padding: 60px 5vw; }
+  .showreel-layout { grid-template-columns: 1fr; }
+  .sr-player-frame { max-width: 360px; }
+  .sr-now-playing  { max-width: 360px; }
+  .sr-playlist { max-width: 100%; }
+  .showreel-title { font-size: clamp(2.2rem, 7vw, 3.5rem); margin-bottom: 32px; }
+
+  /* Work */
+  .work { padding: 60px 5vw; }
   .work-grid { grid-template-columns: minmax(0, 1fr); }
   .work-card.featured { grid-column: span 1 !important; }
   .work-card[data-ratio="portrait"],
   .work-card[data-ratio="landscape"],
-  .work-card {
-    grid-column: span 1 !important;
-  }
+  .work-card { grid-column: span 1 !important; }
   .work-card[data-ratio="portrait"] .card-media { aspect-ratio: 3/4; }
+  .card-info { padding: 20px; }
+
+  /* Skills */
+  .skills { padding: 60px 5vw; }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
-  .hero-stats { gap: 24px; }
-  .filmstrip { display: none; }
+  .services-grid { grid-template-columns: 1fr; }
+  .service-card { padding: 28px 24px; }
+
+  /* Process */
+  .process { padding: 60px 5vw; }
+  .process-timeline { padding-left: 48px; }
+
+  /* About */
+  .about { padding: 60px 5vw; }
+  .about-container { gap: 40px; }
+  .about-award { bottom: -12px; right: -8px; padding: 10px 14px; }
+
+  /* Testimonials */
+  .testimonials { padding: 60px 5vw; }
   .testi-card { padding: 32px 24px; }
+  .testi-quote { font-size: 4rem; }
+
+  /* Contact */
+  .contact { padding: 60px 5vw; }
+  .contact-container { gap: 40px; }
+
+  /* Footer */
+  .footer { padding: 60px 5vw 36px; }
+
+  /* Filmstrip */
+  .filmstrip { display: none; }
+
+  /* Section header */
+  .section-header { margin-bottom: 40px; }
+  .section-title { font-size: clamp(2rem, 8vw, 3.5rem); }
 }
 
+/* ── 600px: Medium phones ──────────────────────── */
+@media (max-width: 600px) {
+  html { font-size: 13.5px; }
+
+  /* Hero */
+  .hero { padding: 88px 4vw 0; }
+  .hero-title { font-size: clamp(2.6rem, 13.5vw, 4rem); line-height: 0.92; }
+  .hero-eyebrow { margin-bottom: 1rem; }
+  .hero-subtitle { font-size: 0.9rem; }
+  .hero-ctas { gap: 0.75rem; }
+  .hero-stats { gap: 18px; flex-wrap: wrap; justify-content: flex-start; }
+  .stat-divider { display: none; }
+  .stat-num { font-size: clamp(1.6rem, 7vw, 2.5rem); }
+  .stat-plus { font-size: 1.5rem; }
+  .stat-label { font-size: 0.65rem; }
+
+  /* Nav */
+  .nav { padding: var(--space-xs) 4vw; }
+  .nav-logo-text { font-size: 1.05rem; letter-spacing: 0.08em; }
+  .nav.scrolled { padding: 0.35rem 4vw; }
+
+  /* Showreel */
+  .showreel { padding: 50px 4vw; }
+  .sr-player-frame { max-width: 100%; }
+  .sr-now-playing { max-width: 100%; }
+
+  /* Work */
+  .work { padding: 50px 4vw; }
+  .work-filters { gap: 6px; margin-bottom: 32px; }
+  .filter-btn { font-size: 0.68rem; padding: 7px 14px; }
+
+  /* Services */
+  .skills { padding: 50px 4vw; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .service-card { padding: 24px 20px; }
+  .service-card h3 { font-size: 1.3rem; }
+
+  /* Process */
+  .process { padding: 50px 4vw; }
+  .process-timeline { padding-left: 40px; }
+  .step-content h3 { font-size: 1.3rem; }
+  .step-number { font-size: 3.5rem; left: -36px; }
+
+  /* About */
+  .about { padding: 50px 4vw; }
+  .about-img-placeholder { max-width: 100%; aspect-ratio: 4/3; }
+  .about-title { font-size: clamp(2rem, 8vw, 3rem); }
+  .about-award { position: static; margin-top: 16px; }
+
+  /* Testimonials */
+  .testimonials { padding: 50px 4vw; }
+  .testi-card { padding: 28px 20px; }
+  .testi-text { font-size: 0.95rem; }
+
+  /* Contact */
+  .contact { padding: 50px 4vw; }
+  .contact-title { font-size: clamp(2rem, 8vw, 3rem); }
+  .social-links { gap: 12px; }
+
+  /* Footer */
+  .footer { padding: 48px 4vw 28px; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .footer-links { flex-wrap: wrap; gap: 16px; }
+  .footer-big-text { font-size: clamp(2.5rem, 10vw, 5rem); }
+}
+
+/* ── 480px: Small-mid phones ───────────────────── */
 @media (max-width: 480px) {
   html { font-size: 13px; }
+
+  /* Hero */
+  .hero { padding: 84px 4.5vw 0; }
+  .hero-title { font-size: clamp(2.4rem, 14vw, 3.5rem); }
+  .hero-ctas { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .btn-primary { padding: 13px 24px; font-size: 0.78rem; }
+  .btn-showreel { font-size: 0.78rem; }
+  .play-icon { width: 42px; height: 42px; }
+
+  /* Showreel */
+  .sr-player-frame { aspect-ratio: 9 / 14; }
+  .showreel-title { font-size: clamp(1.8rem, 10vw, 2.8rem); }
+  .sr-item { padding: 14px 14px; gap: 10px; }
+  .sr-item-num { font-size: 1.1rem; min-width: 22px; }
+
+  /* Services / Skills */
   .skills-grid { grid-template-columns: 1fr; }
-  .hero-ctas { flex-direction: column; align-items: flex-start; }
-  .footer-bottom { flex-direction: column; align-items: flex-start; }
   .services-grid { grid-template-columns: 1fr; }
+  .sc-icon { width: 46px; height: 46px; }
+  .sc-icon svg { width: 20px; height: 20px; }
+
+  /* Process */
+  .process-timeline { padding-left: 36px; }
+  .process-step { gap: 20px; padding: 30px 0; }
+  .step-icon { width: 44px; height: 44px; }
+
+  /* Testimonials */
+  .testi-card { padding: 24px 18px; }
+  .testi-quote { font-size: 3rem; top: 20px; left: 16px; }
+  .testi-text { font-size: 0.9rem; margin-bottom: 24px; }
+  .testi-controls { margin-top: 20px; gap: 14px; }
+  .testi-prev, .testi-next { width: 38px; height: 38px; }
+
+  /* Contact form */
+  .contact-form { gap: 24px; }
+  .form-input { font-size: 0.88rem; }
+
+  /* Footer */
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
 }
+
+/* ── 390px: Modern flagship phones ─────────────── */
+@media (max-width: 390px) {
+  html { font-size: 12.5px; }
+
+  /* Nav */
+  .nav { padding: 0.5rem 4vw; }
+  .nav-logo-text { font-size: 0.95rem; letter-spacing: 0.06em; }
+
+  /* Hero */
+  .hero { padding: 78px 4vw 0; }
+  .hero-title { font-size: clamp(2.2rem, 15vw, 3.2rem); line-height: 0.9; }
+  .hero-eyebrow { gap: 0.5rem; }
+  .eyebrow-text { font-size: 0.65rem; letter-spacing: 0.2em; }
+  .hero-subtitle { font-size: 0.82rem; line-height: 1.7; }
+  .hero-stats { gap: 14px; }
+  .stat-num { font-size: clamp(1.5rem, 8vw, 2.2rem); }
+  .stat-plus { font-size: 1.3rem; }
+  .stat-label { font-size: 0.6rem; letter-spacing: 0.12em; }
+
+  /* Showreel */
+  .showreel { padding: 44px 4vw; }
+  .showreel-title { font-size: clamp(1.6rem, 10vw, 2.4rem); }
+  .sr-item { padding: 12px 12px; }
+  .sr-item-text { font-size: 0.76rem; }
+
+  /* Work */
+  .work { padding: 44px 4vw; }
+  .filter-btn { font-size: 0.65rem; padding: 6px 12px; }
+  .card-info { padding: 16px; }
+  .card-title { font-size: clamp(1rem, 4vw, 1.4rem) !important; }
+  .card-desc { font-size: 0.78rem; }
+  .card-link { font-size: 0.72rem; }
+
+  /* Services */
+  .skills { padding: 44px 4vw; }
+  .service-card { padding: 20px 16px; }
+  .service-card h3 { font-size: 1.2rem; }
+  .service-card p { font-size: 0.82rem; }
+
+  /* Process */
+  .process { padding: 44px 4vw; }
+  .process-timeline { padding-left: 32px; }
+  .step-content h3 { font-size: 1.2rem; }
+  .step-content p { font-size: 0.82rem; }
+
+  /* About */
+  .about { padding: 44px 4vw; }
+  .about-title { font-size: clamp(1.8rem, 9vw, 2.6rem); }
+  .about-text { font-size: 0.88rem; }
+
+  /* Testimonials */
+  .testimonials { padding: 44px 4vw; }
+  .testi-card { padding: 22px 16px; }
+  .testi-text { font-size: 0.85rem; }
+
+  /* Contact */
+  .contact { padding: 44px 4vw; }
+  .contact-title { font-size: clamp(1.8rem, 9vw, 2.6rem); }
+  .contact-desc { font-size: 0.85rem; }
+
+  /* Footer */
+  .footer { padding: 40px 4vw 24px; }
+  .footer-big-text { font-size: clamp(2rem, 10vw, 4rem); }
+}
+
+/* ── 360px: Small modern phones ─────────────────── */
+@media (max-width: 360px) {
+  html { font-size: 12px; }
+
+  /* Nav */
+  .nav-logo-text { font-size: 0.88rem; letter-spacing: 0.04em; }
+
+  /* Hero */
+  .hero { padding: 74px 4vw 0; }
+  .hero-title { font-size: clamp(2rem, 15.5vw, 3rem); }
+  .hero-eyebrow { margin-bottom: 0.75rem; }
+  .eyebrow-line { flex: 0 0 1.5rem; }
+  .hero-ctas { gap: 10px; }
+  .btn-primary { padding: 11px 20px; }
+  .hero-stats { gap: 12px; }
+
+  /* Showreel */
+  .showreel-title { font-size: clamp(1.4rem, 11vw, 2rem); }
+  .sr-item { padding: 10px 10px; gap: 8px; }
+
+  /* Work */
+  .card-title { font-size: clamp(0.95rem, 4.5vw, 1.3rem) !important; }
+  .card-info { padding: 14px; }
+
+  /* Services */
+  .service-card { padding: 18px 14px; }
+  .service-card h3 { font-size: 1.1rem; }
+
+  /* Process */
+  .process-timeline { padding-left: 28px; }
+  .step-number { font-size: 2.8rem; left: -24px; top: 28px; }
+  .step-icon { width: 38px; height: 38px; border-radius: 8px; }
+  .step-icon svg { width: 18px; height: 18px; }
+
+  /* About */
+  .about-title { font-size: clamp(1.6rem, 10vw, 2.4rem); }
+  .aip-circle { width: 5rem; height: 5rem; }
+
+  /* Testimonials */
+  .testi-card { padding: 20px 14px; }
+  .testi-text { font-size: 0.82rem; }
+  .testi-quote { font-size: 2.5rem; }
+  .testi-prev, .testi-next { width: 34px; height: 34px; }
+  .testi-prev svg, .testi-next svg { width: 14px; height: 14px; }
+
+  /* Contact */
+  .contact-title { font-size: clamp(1.6rem, 10vw, 2.4rem); }
+  .social-link { width: 38px; height: 38px; }
+  .social-link svg { width: 14px; height: 14px; }
+}
+
+/* ── 320px: Minimum support (iPhone SE 1st gen) ─── */
+@media (max-width: 320px) {
+  html { font-size: 11.5px; }
+
+  .hero-title { font-size: clamp(1.8rem, 16vw, 2.6rem); }
+  .hero-eyebrow { gap: 0.4rem; }
+  .btn-primary { padding: 10px 16px; font-size: 0.72rem; }
+  .sr-player-frame { aspect-ratio: 9 / 13; }
+  .service-card { padding: 16px 12px; }
+  .process-timeline { padding-left: 24px; }
+  .step-number { font-size: 2.4rem; left: -20px; }
+  .about-title { font-size: clamp(1.5rem, 11vw, 2.2rem); }
+  .contact-title { font-size: clamp(1.5rem, 11vw, 2.2rem); }
+  .footer-big-text { font-size: clamp(1.8rem, 11vw, 3rem); }
+}
+
 
 /* ══════════════════════════════════════════════════
    MOBILE PERFORMANCE — keep beauty, kill CPU hogs
