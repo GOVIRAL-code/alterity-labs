@@ -362,13 +362,13 @@ body.cursor-hover .cursor-follower { opacity: 0; transform: translate(-50%, -50%
    HERO
 ══════════════════════════════════════════════════ */
 .hero {
-  min-height: 100vh;
+  min-height: auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   overflow: clip;
-  padding: var(--space-xl) 5vw 0;
+  padding: 140px 5vw 0;
   background: var(--dark);
 }
 
@@ -453,7 +453,7 @@ body.cursor-hover .cursor-follower { opacity: 0; transform: translate(-50%, -50%
   max-width: var(--container-max);
   width: 100%;
   margin: 0 auto;
-  padding-bottom: var(--space-xl);
+  padding-bottom: 0;
 }
 .hero-eyebrow {
   display: flex;
@@ -587,6 +587,7 @@ body.cursor-hover .cursor-follower { opacity: 0; transform: translate(-50%, -50%
   border-top: 1px solid var(--mid);
   padding: 18px 0;
   background: var(--dark-2);
+  margin-top: 60px;
 }
 .marquee-track {
   display: flex;
