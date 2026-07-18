@@ -6,21 +6,21 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --db-bg:          #060813;
-  --db-surface:     #0b0e20;
-  --db-surface2:    #101530;
-  --db-surface3:    #171c3d;
-  --db-border:      #1c224a;
-  --db-border2:     #262e64;
-  --db-accent:      #2b66ff;
-  --db-accent-rgb:  43, 102, 255;
-  --db-accent2:     #ff4757;
-  --db-accent2-rgb: 255, 71, 87;
-  --db-text:        #f1f3fa;
-  --db-muted:       #6f7a9f;
-  --db-muted2:      #4a5378;
-  --db-green:       #4cf0b8;
-  --db-red:         #ff5555;
+  --db-bg:          #000000;
+  --db-surface:     #0a0a0a;
+  --db-surface2:    #111111;
+  --db-surface3:    #1a1a0f;
+  --db-border:      #1e1a06;
+  --db-border2:     #2a2410;
+  --db-accent:      #C9A227;
+  --db-accent-rgb:  201, 162, 39;
+  --db-accent2:     #E8C547;
+  --db-accent2-rgb: 232, 197, 71;
+  --db-text:        #f5f0e0;
+  --db-muted:       #8a7a50;
+  --db-muted2:      #5a4e30;
+  --db-green:       #C9A227;
+  --db-red:         #c0392b;
   --db-yt:          #ff4444;
   --db-ig:          #c13584;
   --db-sidebar-w:   15rem;
