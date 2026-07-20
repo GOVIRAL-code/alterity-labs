@@ -218,7 +218,7 @@ const isLocalFile = window.location.protocol === 'file:';
       this.vx = this.baseVx;
       this.vy = this.baseVy;
       this.alpha = Math.random() * 0.5 + 0.2;
-      this.color = Math.random() > 0.65 ? '#2b66ff' : (Math.random() > 0.85 ? '#ff4757' : '#ffffff');
+      this.color = Math.random() > 0.65 ? '#C9A227' : (Math.random() > 0.85 ? '#E8C547' : '#ffffff');
     }
     update() {
       // Interactive gravity pull
@@ -285,8 +285,8 @@ const isLocalFile = window.location.protocol === 'file:';
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
-          // Connect in Cobalt Blue accent
-          ctx.strokeStyle = `rgba(43, 102, 255, ${(1 - dist / 100) * 0.12})`;
+          // Connect in Premium Gold accent
+          ctx.strokeStyle = `rgba(201, 162, 39, ${(1 - dist / 100) * 0.12})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -301,8 +301,8 @@ const isLocalFile = window.location.protocol === 'file:';
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(mouse.x, mouse.y);
-          // Laser links to cursor in Crimson Orange accent
-          ctx.strokeStyle = `rgba(255, 71, 87, ${(1 - dist / 130) * 0.18})`;
+          // Laser links to cursor in Warm Bright Gold accent
+          ctx.strokeStyle = `rgba(232, 197, 71, ${(1 - dist / 130) * 0.18})`;
           ctx.lineWidth = 0.7;
           ctx.stroke();
         }
