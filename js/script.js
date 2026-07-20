@@ -1275,9 +1275,6 @@ function ytId(url) {
     currentX += (targetX - currentX) * 0.08;
     currentY += (targetY - currentY) * 0.08;
 
-    if (heroContent) {
-      heroContent.style.transform = `translate(${currentX * 0.22}px, ${currentY * 0.22}px)`;
-    }
     // Background orbs wrappers move in opposite direction for physical 3D depth parallax
     if (ow1) {
       ow1.style.transform = `translate(${currentX * -0.5}px, ${currentY * -0.5}px)`;
